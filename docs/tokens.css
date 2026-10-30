@@ -1,0 +1,17 @@
+/* Paleta "02 / Ceniza y Burdeos" — sacada del mockup */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:wght@400;500&display=swap');
+
+:root {
+  --ash-950: #0A0A0A;   /* fondo */
+  --ash-800: #33312F;   /* bordes / paneles */
+  --ash-500: #726E68;   /* texto secundario */
+  --ash-300: #B7B4AE;   /* texto cuerpo */
+  --bone-100: #F1E9DD;  /* títulos */
+  --wine-900: #371E1E;  /* botón primario */
+  --wine-500: #8E2A2E;  /* acento (punto del logo, hojas) */
+  --glow: #F3E6D3;      /* ecos / cristales */
+
+  --font-display: 'Cormorant Garamond', serif;  /* "Del código a la experiencia" */
+  --font-body: 'EB Garamond', serif;            /* párrafos, botones */
+  --tracking-caps: 0.22em;                      /* "LAURA MUÑOZ / UNITY DEVELOPER" */
+}

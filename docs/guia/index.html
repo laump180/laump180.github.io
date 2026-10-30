@@ -1,0 +1,1303 @@
+<title>Bitácora Ceniza y Burdeos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: índice fijo a la izquierda + columna de lectura de ~68ch. Un solo look oscuro, como el portfolio. */
+  :root {
+    --bg: #0b0a0a;
+    --surface: #141212;
+    --surface-2: #1b1818;
+    --line: #33312f;
+    --muted: #8d877f;
+    --text: #cbc6bf;
+    --head: #f1e9dd;
+    --wine: #371e1e;
+    --accent: #c0535a;
+    --glow: #f3e6d3;
+    --ok: #8fae86;
+    --warn: #d1a45f;
+    --info: #8aa6c4;
+
+    --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+    --font-body: 'EB Garamond', 'Iowan Old Style', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+    --step-0: 1.15rem;
+    --step-1: 1.35rem;
+    --step-2: 1.75rem;
+    --step-3: 2.4rem;
+    --step-4: clamp(2.6rem, 6vw, 4.4rem);
+
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(to right, rgb(241 233 221 / 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(241 233 221 / 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+  }
+  ::selection { background: var(--accent); color: var(--head); }
+  a { color: var(--head); text-decoration-color: var(--accent); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--head); }
+  :focus-visible { outline: 1px solid var(--head); outline-offset: 3px; }
+
+  .wrap {
+    max-width: 1240px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 96px;
+  }
+
+  /* ---------- Cabecera ---------- */
+  .masthead { display: grid; gap: 20px; padding-block: 72px 48px; border-bottom: 1px solid var(--line); margin-bottom: 48px; }
+  .eyebrow { font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: var(--font-display); font-weight: 500; font-size: var(--step-4); line-height: 0.95; color: var(--head); margin: 0; text-wrap: balance; max-width: 16ch; }
+  .dot { color: var(--accent); }
+  .lede { max-width: 62ch; font-size: var(--step-1); margin: 0; }
+  .how { display: grid; gap: 10px; max-width: 70ch; margin: 8px 0 0; padding: 0; list-style: none; font-size: 1.02rem; }
+  .how li { display: grid; grid-template-columns: 112px 1fr; gap: 12px; align-items: baseline; }
+  .how .tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .06em; padding: 2px 8px; border: 1px solid var(--line); text-align: center; }
+  .tag.why { color: var(--accent); border-color: rgb(192 83 90 / .5); }
+  .tag.simple { color: var(--info); border-color: rgb(138 166 196 / .5); }
+  .tag.oops { color: var(--warn); border-color: rgb(209 164 95 / .5); }
+  .tag.try { color: var(--ok); border-color: rgb(143 174 134 / .5); }
+  @media (max-width: 520px) { .how li { grid-template-columns: 1fr; gap: 2px; } .how .tag { justify-self: start; } }
+
+  /* ---------- Rejilla ---------- */
+  .layout { display: grid; gap: 48px; }
+  @media (min-width: 980px) { .layout { grid-template-columns: 260px minmax(0, 1fr); gap: 64px; } }
+
+  .toc { font-size: 0.98rem; }
+  .toc-inner { border: 1px solid var(--line); padding: 18px 18px 14px; background: var(--surface); }
+  @media (min-width: 980px) {
+    .toc-inner { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); max-height: calc(100vh - 48px); overflow: auto; }
+  }
+  .toc summary { cursor: pointer; list-style: none; font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--head); }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc ol { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 1px; }
+  .toc .part-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-top: 12px; padding-bottom: 2px; }
+  .toc li.item { display: grid; grid-template-columns: 24px 1fr; align-items: baseline; gap: 6px; }
+  .toc .n { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+  .toc a { text-decoration: none; color: var(--text); padding-block: 2px; line-height: 1.35; }
+  .toc a:hover, .toc a.is-active { color: var(--head); }
+  .toc a.is-active { text-decoration: underline; text-decoration-color: var(--accent); }
+  .toc li.is-done .n { color: var(--ok); }
+  .progress { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); display: grid; gap: 8px; }
+  .bar { height: 3px; background: var(--line); }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s ease; }
+
+  /* ---------- Contenido ---------- */
+  main { min-width: 0; }
+  .part-head { max-width: 70ch; margin: 0 0 40px; padding-top: 8px; }
+  .part-head .k { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--accent); }
+  .part-head h2 { font-size: var(--step-4); margin-top: 6px; }
+  .part-head p { font-size: var(--step-1); }
+  .step { max-width: 70ch; padding-bottom: 56px; margin-bottom: 56px; border-bottom: 1px solid var(--line); scroll-margin-top: 24px; }
+  .step-head { display: grid; gap: 6px; margin-bottom: 18px; }
+  .step-num { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; color: var(--accent); }
+  h2 { font-family: var(--font-display); font-weight: 500; font-size: var(--step-3); line-height: 1.05; color: var(--head); margin: 0; text-wrap: balance; }
+  h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--step-2); line-height: 1.15; color: var(--head); margin: 34px 0 8px; text-wrap: balance; }
+  p { margin: 0 0 16px; }
+  ul, ol.plain { margin: 0 0 16px; padding-left: 1.2em; }
+  li { margin-bottom: 6px; }
+  strong { color: var(--head); font-weight: 500; }
+  em { color: var(--head); }
+  code { font-family: var(--font-mono); font-size: 0.8em; background: var(--surface-2); color: var(--glow); padding: 1px 5px; border: 1px solid var(--line); }
+
+  .box { border: 1px solid var(--line); background: var(--surface); padding: 16px 18px; margin: 20px 0; }
+  .box > .label { display: block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .box p:last-child, .box ul:last-child { margin-bottom: 0; }
+  .box.simple { border-left: 3px solid var(--info); }
+  .box.simple > .label { color: var(--info); }
+  .box.why { border-left: 3px solid var(--accent); }
+  .box.why > .label { color: var(--accent); }
+  .box.oops { border-left: 3px solid var(--warn); }
+  .box.oops > .label { color: var(--warn); }
+  .box.try { border-left: 3px solid var(--ok); }
+  .box.try > .label { color: var(--ok); }
+
+  /* Código + explicación línea por línea */
+  .code { margin: 18px 0 4px; border: 1px solid var(--line); background: #0f0d0d; }
+  .code .file { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  .code .file span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy { font: inherit; color: var(--text); background: transparent; border: 1px solid var(--line); padding: 2px 10px; cursor: pointer; }
+  .copy:hover { color: var(--head); border-color: var(--muted); }
+  pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.65; color: #ddd6cc; tab-size: 2; }
+  pre .c { color: #857e76; font-style: italic; }
+  pre .k { color: #d68a8f; }
+  pre .s { color: #c9b98f; }
+  pre .n { color: #9fbcd9; }
+  .lines { list-style: none; margin: 0 0 22px; padding: 0; border: 1px solid var(--line); border-top: 0; background: var(--surface); }
+  .lines li { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: 14px; padding: 10px 14px; margin: 0; border-top: 1px solid var(--line); font-size: 1rem; }
+  .lines li:first-child { border-top: 0; }
+  .lines li > code { align-self: start; white-space: pre-wrap; word-break: break-word; }
+  @media (max-width: 560px) { .lines li { grid-template-columns: 1fr; gap: 4px; } }
+
+  /* Tabla */
+  .table-wrap { overflow-x: auto; margin: 18px 0 22px; border: 1px solid var(--line); }
+  table { border-collapse: collapse; width: 100%; font-size: 1rem; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 400; background: var(--surface); }
+  tr:last-child td { border-bottom: 0; }
+
+  /* Mapa de la página (wireframes) */
+  .wire { border: 1px dashed var(--line); padding: 10px; display: grid; gap: 8px; margin: 18px 0; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  .wire > div { border: 1px solid var(--line); background: var(--surface); padding: 10px 12px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .wire b { color: var(--head); font-weight: 500; }
+  .wire .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border: 0; background: none; padding: 0; }
+  .wire .row > div { border: 1px solid var(--line); background: var(--surface); padding: 10px 12px; }
+
+  /* Árbol */
+  .tree pre { font-size: 0.78rem; }
+
+  /* Demos */
+  .demo { border: 1px solid var(--line); background: var(--surface); margin: 22px 0; padding: 16px; display: grid; gap: 14px; }
+  .demo .demo-title { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ok); }
+  .demo canvas { width: 100%; height: 180px; display: block; background: #0d0b0b; border: 1px solid var(--line); touch-action: none; }
+  .controls { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .controls.c3 { grid-template-columns: 1fr 1fr auto; align-items: end; } .controls.c2 { grid-template-columns: 1fr auto; align-items: end; } }
+  .controls label { display: grid; gap: 4px; font-size: 0.9rem; color: var(--muted); }
+  .controls output { font-family: var(--font-mono); color: var(--head); font-size: 0.8rem; }
+  .controls input[type=range] { width: 100%; accent-color: var(--accent); }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { font-family: var(--font-body); font-size: 1rem; color: var(--head); background: var(--wine); border: 1px solid rgb(192 83 90 / 0.6); padding: 8px 18px; cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.ghost { background: transparent; border-color: var(--line); }
+  .readout { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); margin: 0; }
+  .readout b { color: var(--head); font-weight: 500; }
+  .readout .yes { color: var(--ok); }
+  .readout .no { color: var(--accent); }
+
+  /* Flipbook */
+  .frames { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+  .frames div { aspect-ratio: 1; border: 1px solid var(--line); background: #0d0b0b; position: relative; }
+  .frames span { position: absolute; width: 14%; aspect-ratio: 1; border-radius: 50%; background: var(--glow); }
+  .frames small { position: absolute; left: 4px; top: 2px; font-family: var(--font-mono); font-size: .6rem; color: var(--muted); }
+
+  /* Iteraciones */
+  .iter { list-style: none; padding: 0; margin: 18px 0; }
+  .iter li { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); margin: 0; }
+  .iter li:first-child { border-top: 0; }
+  .iter .v { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); padding-top: 4px; }
+  .iter .fb { display: block; color: var(--muted); font-style: italic; font-size: 1rem; }
+
+  /* Glosario */
+  dl.gloss { display: grid; grid-template-columns: minmax(120px, 0.6fr) minmax(0, 1.6fr); gap: 0; border: 1px solid var(--line); margin: 18px 0; }
+  dl.gloss dt, dl.gloss dd { margin: 0; padding: 10px 14px; border-top: 1px solid var(--line); }
+  dl.gloss dt:first-of-type, dl.gloss dd:first-of-type { border-top: 0; }
+  dl.gloss dt { color: var(--head); font-family: var(--font-mono); font-size: .82rem; background: var(--surface); }
+  @media (max-width: 560px) { dl.gloss { grid-template-columns: 1fr; } dl.gloss dd { border-top: 0; padding-top: 0; } }
+
+  /* Ejercicios */
+  .exercises { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 10px; }
+  .exercises li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; border: 1px solid var(--line); padding: 12px 14px; margin: 0; background: var(--surface); }
+  .exercises input { margin-top: 7px; accent-color: var(--accent); width: 16px; height: 16px; }
+  .exercises .lvl { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); letter-spacing: .08em; }
+
+  .mark-done { margin-top: 8px; font-family: var(--font-mono); font-size: 0.75rem; background: transparent; color: var(--muted); border: 1px solid var(--line); padding: 5px 12px; cursor: pointer; }
+  .mark-done[aria-pressed="true"] { color: var(--ok); border-color: var(--ok); }
+  footer.end { max-width: 70ch; color: var(--muted); font-size: 0.95rem; border-top: 1px solid var(--line); padding-top: 20px; }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <span class="eyebrow">Guía para principiantes · paso a paso</span>
+    <h1>Cómo construimos el portfolio de Laura<span class="dot">.</span></h1>
+    <p class="lede">Una página web con un minijuego dentro, explicada desde cero. No necesitas saber programar para seguirla: cada palabra rara se explica la primera vez que aparece, y cada trozo de código viene traducido línea por línea.</p>
+    <ul class="how">
+      <li><span class="tag simple">EN SIMPLE</span><span>Una comparación con algo de la vida diaria.</span></li>
+      <li><span class="tag why">POR QUÉ</span><span>La razón de hacerlo así y no de otra forma.</span></li>
+      <li><span class="tag oops">QUÉ SALIÓ MAL</span><span>Errores reales que tuvimos y cómo los arreglamos.</span></li>
+      <li><span class="tag try">PRUÉBALO</span><span>Demos que puedes tocar aquí mismo.</span></li>
+    </ul>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Índice de la guía">
+      <div class="toc-inner">
+        <details id="toc-details" open>
+          <summary>Índice</summary>
+          <ol id="toc-list"></ol>
+        </details>
+        <div class="progress" aria-live="polite">
+          <span id="progress-text">0 de 0 capítulos leídos</span>
+          <div class="bar"><i id="progress-bar"></i></div>
+        </div>
+      </div>
+    </nav>
+
+    <main id="steps">
+
+<!-- ======================= PARTE 1 ======================= -->
+      <div class="part-head" data-part="Antes de empezar">
+        <span class="k">PARTE 1</span>
+        <h2>Antes de empezar</h2>
+        <p>Qué es lo que construimos y las cuatro o cinco ideas que necesitas para entender todo lo demás.</p>
+      </div>
+
+      <section class="step" id="que-hicimos" data-title="Qué construimos">
+        <div class="step-head"><span class="step-num">CAPÍTULO 1</span><h2>Qué construimos</h2></div>
+        <p>Laura es desarrolladora de videojuegos y necesitaba un <strong>portfolio</strong>: una página web donde mostrar quién es y qué ha hecho, como una hoja de vida pero más visual.</p>
+        <p>La página tiene:</p>
+        <ul>
+          <li><strong>Inicio</strong>, con una ilustración grande, su nombre y un <strong>minijuego</strong> que se juega con el teclado: una encapuchada recoge cristales brillantes.</li>
+          <li><strong>Proyectos</strong>: tarjetas con los juegos que hizo y una página de detalle para cada uno.</li>
+          <li><strong>Sobre mí</strong>: su experiencia, sus estudios y un botón para descargar su CV.</li>
+          <li><strong>Contacto</strong>: un formulario para escribirle.</li>
+          <li><strong>Música de fondo</strong> con un control de volumen.</li>
+        </ul>
+        <p>Antes de escribir una sola línea de código, nos dieron tres cosas:</p>
+        <ol class="plain">
+          <li>Un <strong>mockup</strong>: una imagen de cómo debía verse la página terminada. Es como el plano de una casa antes de construirla.</li>
+          <li>Los <strong>assets</strong>: las imágenes ya recortadas (la ilustración, el personaje, los cristales, los íconos).</li>
+          <li>Los <strong>tokens</strong>: la lista de colores y letras que usa el diseño, con nombres. Por ejemplo, <code>wine-500</code> es el rojo vino.</li>
+        </ol>
+        <div class="box simple"><span class="label">En simple</span><p>Nuestro trabajo fue convertir un dibujo (el mockup) en una página de verdad que funciona en el computador y en el celular.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="ideas-basicas" data-title="Las ideas básicas">
+        <div class="step-head"><span class="step-num">CAPÍTULO 2</span><h2>Las ideas básicas de una web</h2></div>
+        <p>Toda página web está hecha de tres ingredientes. Piensa en una persona:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Ingrediente</th><th>Qué hace</th><th>Comparación</th></tr></thead>
+          <tbody>
+            <tr><td><strong>HTML</strong></td><td>Dice <em>qué hay</em> en la página: un título, un párrafo, una imagen, un botón.</td><td>El esqueleto</td></tr>
+            <tr><td><strong>CSS</strong></td><td>Dice <em>cómo se ve</em>: colores, tamaños, posición, letras.</td><td>La ropa y el maquillaje</td></tr>
+            <tr><td><strong>JavaScript</strong></td><td>Dice <em>qué pasa</em> cuando haces algo: hacer clic, escribir, mover el personaje.</td><td>Los músculos</td></tr>
+          </tbody>
+        </table></div>
+        <p>Sobre esos tres ingredientes usamos <strong>herramientas</strong> que hacen el trabajo más fácil y ordenado:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Herramienta</th><th>Para qué la usamos</th></tr></thead>
+          <tbody>
+            <tr><td><strong>React</strong></td><td>Construir la página con <em>piezas reutilizables</em> llamadas componentes. Lo vemos en el capítulo 3.</td></tr>
+            <tr><td><strong>TypeScript</strong></td><td>Es JavaScript con "etiquetas" que dicen qué tipo de dato es cada cosa. Así el editor te avisa de errores antes de abrir la página.</td></tr>
+            <tr><td><strong>Tailwind CSS</strong></td><td>Escribir el CSS con nombres cortos directamente en el HTML, como <code>text-red-500</code> o <code>p-4</code>.</td></tr>
+            <tr><td><strong>Vite</strong></td><td>El "horno": junta todos los archivos, los prepara y muestra la página mientras trabajas. Cada vez que guardas, se actualiza sola.</td></tr>
+            <tr><td><strong>React Router</strong></td><td>Hace que la página tenga varias secciones con su propia dirección (<code>/proyectos</code>, <code>/contacto</code>) sin recargar todo.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="box simple"><span class="label">En simple</span><p>HTML, CSS y JavaScript son los ladrillos. React, TypeScript, Tailwind y Vite son las herramientas del albañil: no son obligatorias, pero hacen el trabajo más rápido y con menos errores.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="componentes" data-title="Componentes: piezas de Lego">
+        <div class="step-head"><span class="step-num">CAPÍTULO 3</span><h2>Componentes: piezas de Lego</h2></div>
+        <p>La idea más importante de React es el <strong>componente</strong>. Un componente es una pieza de la página que puedes usar muchas veces, como una pieza de Lego.</p>
+        <p>Mira el mockup: hay botones rojos en el inicio, en los proyectos y en el juego. En lugar de escribir el mismo botón muchas veces, lo escribimos <strong>una vez</strong> como componente y lo usamos donde haga falta.</p>
+        <p>Así se ve un componente muy simplificado:</p>
+        <div class="code"><div class="file"><span>Un componente sencillo</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">function</span> <span class="n">Saludo</span>({ nombre }) {
+  <span class="k">return</span> &lt;p&gt;Hola, {nombre}&lt;/p&gt;
+}
+
+<span class="c">// Y así se usa, dos veces:</span>
+&lt;Saludo nombre=<span class="s">"Laura"</span> /&gt;
+&lt;Saludo nombre=<span class="s">"Ana"</span> /&gt;</pre></div>
+        <ul class="lines">
+          <li><code>function Saludo(...)</code><span>Creamos una pieza llamada <em>Saludo</em>. Los componentes siempre empiezan con mayúscula.</span></li>
+          <li><code>{ nombre }</code><span>Lo que va entre llaves son las <strong>props</strong>: los datos que le pasas a la pieza. Es como decirle "este saludo es para Laura".</span></li>
+          <li><code>return &lt;p&gt;...</code><span>Lo que la pieza dibuja en la pantalla. Parece HTML, pero está dentro de JavaScript (eso se llama <strong>JSX</strong>).</span></li>
+          <li><code>{nombre}</code><span>Las llaves dentro del HTML significan "pon aquí el valor de esta variable".</span></li>
+          <li><code>&lt;Saludo nombre="Laura" /&gt;</code><span>Usamos la pieza como si fuera una etiqueta HTML más. En pantalla aparece "Hola, Laura".</span></li>
+        </ul>
+        <p>Toda la página de Laura está hecha así: piezas pequeñas (un botón, un rombo decorativo, una tarjeta) que se juntan en piezas más grandes (la sección de proyectos), que a su vez forman la página entera.</p>
+        <div class="box why"><span class="label">Por qué</span><p>Si mañana Laura quiere los botones más redondos, se cambia <strong>un solo archivo</strong> y cambian todos los botones del sitio a la vez.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+<!-- ======================= PARTE 2 ======================= -->
+      <div class="part-head" data-part="Preparar el taller">
+        <span class="k">PARTE 2</span>
+        <h2>Preparar el taller</h2>
+        <p>Instalar lo necesario, crear el proyecto y ordenar las carpetas.</p>
+      </div>
+
+      <section class="step" id="node" data-title="Instalar Node">
+        <div class="step-head"><span class="step-num">CAPÍTULO 4</span><h2>Instalar Node y crear el proyecto</h2></div>
+        <p><strong>Node</strong> es un programa que permite usar JavaScript fuera del navegador. Lo necesitamos porque todas las herramientas (Vite, React Router…) funcionan con él. Junto con Node viene <strong>npm</strong>, una "tienda de piezas" de donde se descargan librerías.</p>
+        <p>El computador tenía una versión vieja de Node (la 16). Las herramientas modernas necesitan una nueva. Para cambiarla usamos <strong>nvm</strong>, que permite tener varias versiones instaladas y elegir cuál usar:</p>
+        <div class="code"><div class="file"><span>Terminal</span><button class="copy" type="button">Copiar</button></div><pre>nvm install 26.13.0   <span class="c"># descarga la versión 26</span>
+nvm use 26.13.0       <span class="c"># y la deja activa</span>
+node -v               <span class="c"># comprueba: debe decir v26.13.0</span></pre></div>
+        <div class="box simple"><span class="label">En simple</span><p>La <strong>terminal</strong> es la ventana negra donde escribes órdenes al computador. Lo que va después de <code>#</code> es un comentario: una nota para personas que el computador ignora.</p></div>
+        <p>Luego creamos el proyecto con Vite. Un solo comando genera la carpeta con todo lo básico:</p>
+        <div class="code"><div class="file"><span>Terminal</span><button class="copy" type="button">Copiar</button></div><pre>npm create vite@latest mi-portfolio -- --template react-ts
+cd mi-portfolio
+npm install      <span class="c"># descarga las piezas que el proyecto necesita</span>
+npm run dev      <span class="c"># enciende la página en http://localhost:5173</span></pre></div>
+        <p>Después instalamos las piezas extra: React Router (para las páginas), Tailwind (para los estilos) y dos librerías de íconos.</p>
+        <div class="box oops"><span class="label">Qué salió mal</span><p>La primera vez, con la versión 22.19 de Node, npm instaló en silencio una versión <em>vieja</em> de React Router. ¿Por qué? Porque la versión nueva pide Node 22.22 o más. Moraleja: si una librería no se instala en la versión que esperas, revisa qué versión de Node pide.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="carpetas" data-title="Ordenar las carpetas">
+        <div class="step-head"><span class="step-num">CAPÍTULO 5</span><h2>Ordenar las carpetas</h2></div>
+        <p>Un proyecto desordenado es como una casa donde los zapatos están en la nevera. Elegimos una forma de ordenar llamada <strong>Screaming Architecture</strong> ("arquitectura que grita"): las carpetas se nombran por <strong>lo que hace la página</strong>, no por cuestiones técnicas.</p>
+        <div class="code tree"><div class="file"><span>Carpeta src/ (el código)</span></div><pre>app/                 <span class="c">← el arranque: rutas, estilos generales</span>
+features/            <span class="c">← cada parte de la página en su propia carpeta</span>
+  hero/              <span class="c">← la sección grande del inicio</span>
+  echo-collector/    <span class="c">← el minijuego</span>
+  projects/          <span class="c">← los proyectos</span>
+  about/             <span class="c">← "Sobre mí"</span>
+  contact/           <span class="c">← el formulario</span>
+  ambient-audio/     <span class="c">← la música</span>
+  home/              <span class="c">← junta hero + juego + proyectos</span>
+  not-found/         <span class="c">← la página de error 404</span>
+shared/              <span class="c">← lo que usan varias partes</span>
+  ui/                <span class="c">← botones, rombos, marcos…</span>
+  layout/            <span class="c">← barra de arriba y pie de página</span>
+  assets/            <span class="c">← imágenes</span></pre></div>
+        <p>Abres <code>features</code> y entiendes al momento de qué trata el proyecto: tiene un juego, proyectos, contacto… Por eso "grita".</p>
+        <h3>Tres reglas de convivencia</h3>
+        <ol class="plain">
+          <li>Cada carpeta de <code>features</code> tiene un archivo <code>index.ts</code> que funciona como <strong>la puerta de entrada</strong>: dice qué se puede usar desde fuera.</li>
+          <li>Una parte nunca entra por la ventana de otra: solo usa lo que la otra ofrece por su puerta.</li>
+          <li>Lo que necesitan varias partes (como el botón) vive en <code>shared</code>, el "cuarto común".</li>
+        </ol>
+        <div class="box simple"><span class="label">En simple</span><p>Es como un edificio de apartamentos: cada apartamento tiene su puerta, nadie entra por la ventana del vecino, y la escalera y el ascensor son de todos.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="colores" data-title="Colores y letras">
+        <div class="step-head"><span class="step-num">CAPÍTULO 6</span><h2>Colores y letras con nombre</h2></div>
+        <p>El diseño se llama "Ceniza y Burdeos": negros, grises y un rojo vino. En lugar de escribir el código del color (<code>#8E2A2E</code>) cada vez, le dimos <strong>nombre</strong> a cada color en un solo lugar:</p>
+        <div class="code"><div class="file"><span>src/app/styles/index.css</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">@theme</span> {
+  --color-ash-950: #0a0a0a;    <span class="c">/* el fondo casi negro   */</span>
+  --color-bone-100: #f1e9dd;   <span class="c">/* el blanco hueso       */</span>
+  --color-wine-500: #8e2a2e;   <span class="c">/* el rojo vino          */</span>
+  --font-display: <span class="s">'Cormorant Garamond'</span>, serif;  <span class="c">/* letra de títulos */</span>
+}</pre></div>
+        <ul class="lines">
+          <li><code>@theme { ... }</code><span>Le decimos a Tailwind: "estos son los colores y letras de nuestro diseño".</span></li>
+          <li><code>--color-wine-500: #8e2a2e</code><span>El rojo vino se llama <em>wine-500</em>. El número indica qué tan oscuro es.</span></li>
+        </ul>
+        <p>Gracias a esto podemos escribir en cualquier parte <code>text-wine-500</code> (texto rojo vino) o <code>bg-ash-950</code> (fondo casi negro), y Tailwind sabe qué color es.</p>
+        <h3>Cómo se lee una clase de Tailwind</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Clase</th><th>Significa</th></tr></thead>
+          <tbody>
+            <tr><td><code>text-bone-100</code></td><td>Texto de color blanco hueso</td></tr>
+            <tr><td><code>bg-wine-900</code></td><td>Fondo (<em>background</em>) vino oscuro</td></tr>
+            <tr><td><code>p-4</code></td><td>Relleno interior (<em>padding</em>) de 4 unidades por todos los lados</td></tr>
+            <tr><td><code>mt-8</code></td><td>Margen arriba (<em>margin-top</em>) de 8 unidades</td></tr>
+            <tr><td><code>border border-ash-800</code></td><td>Un borde fino de color gris</td></tr>
+            <tr><td><code>lg:text-7xl</code></td><td>Letra enorme, pero <strong>solo en pantallas grandes</strong></td></tr>
+          </tbody>
+        </table></div>
+        <div class="box why"><span class="label">Por qué</span><p>Si un día el rojo cambia, se cambia en una línea y toda la página se actualiza. Y como los colores tienen nombres, el código se lee casi como una frase.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+<!-- ======================= PARTE 3 ======================= -->
+      <div class="part-head" data-part="Página por página">
+        <span class="k">PARTE 3</span>
+        <h2>Página por página</h2>
+        <p>Recorremos cada página: qué ves en ella y cómo está hecha por dentro.</p>
+      </div>
+
+      <section class="step" id="rutas" data-title="Las direcciones de la página">
+        <div class="step-head"><span class="step-num">CAPÍTULO 7</span><h2>Las direcciones de la página</h2></div>
+        <p>Cada página tiene su dirección, como las habitaciones de una casa. Las definimos en una lista:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Dirección</th><th>Qué muestra</th></tr></thead>
+          <tbody>
+            <tr><td><code>/</code></td><td>Inicio: ilustración, juego y proyectos destacados</td></tr>
+            <tr><td><code>/proyectos</code></td><td>Todos los proyectos</td></tr>
+            <tr><td><code>/proyectos/echoes</code></td><td>El detalle de un proyecto (cambia la última palabra)</td></tr>
+            <tr><td><code>/sobre-mi</code></td><td>Experiencia, estudios y CV</td></tr>
+            <tr><td><code>/contacto</code></td><td>Formulario</td></tr>
+            <tr><td>cualquier otra</td><td>Página "Un eco perdido" (error 404)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="code"><div class="file"><span>src/app/router/routes.tsx (resumido)</span></div><pre>{
+  path: <span class="s">'proyectos/:slug'</span>,
+  lazy: <span class="k">async</span> () =&gt; ({ Component: (<span class="k">await import</span>(<span class="s">'@/features/projects'</span>)).ProjectDetailPage }),
+}</pre></div>
+        <ul class="lines">
+          <li><code>path: 'proyectos/:slug'</code><span>La dirección. Los dos puntos significan "aquí va algo que cambia". <em>slug</em> es el nombre corto del proyecto, por ejemplo <code>echoes</code>.</span></li>
+          <li><code>lazy: async () =&gt; ...</code><span><em>Lazy</em> significa "perezoso": el código de esa página solo se descarga cuando alguien la visita.</span></li>
+          <li><code>await import(...)</code><span>"Espera a traer este archivo". Mientras no visites Contacto, tu navegador no descarga el código de Contacto.</span></li>
+        </ul>
+        <p>Todas las páginas comparten un <strong>marco</strong>: la barra de arriba y el pie de página. Lo que cambia es solo el centro.</p>
+        <div class="wire" aria-hidden="true">
+          <div><b>Barra de arriba</b><span>siempre igual</span></div>
+          <div style="min-height:70px"><b>Centro</b><span>cambia según la dirección</span></div>
+          <div><b>Pie de página</b><span>siempre igual</span></div>
+        </div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="barra" data-title="La barra de arriba">
+        <div class="step-head"><span class="step-num">CAPÍTULO 8</span><h2>La barra de arriba</h2></div>
+        <p><strong>Qué ves:</strong> "Laura Muñoz Pérez." con el punto en rojo, los enlaces Proyectos · Sobre mí · Contacto separados por rombitos, y un adorno a la derecha. La barra se queda pegada arriba cuando bajas.</p>
+        <p><strong>Cómo está hecha:</strong></p>
+        <ul>
+          <li><strong>Pegada arriba:</strong> la clase <code>sticky top-0</code>. <em>Sticky</em> significa "pegajoso": el elemento se pega al borde cuando lo alcanzas al bajar.</li>
+          <li><strong>El enlace activo se subraya:</strong> usamos <code>NavLink</code>, un enlace especial de React Router que sabe si estás en su página y nos deja cambiarle el estilo.</li>
+          <li><strong>En el celular</strong> los enlaces no caben, así que se esconden y aparece un botón de menú (☰). Al tocarlo se abre la lista; al cambiar de página se cierra solo.</li>
+        </ul>
+        <div class="code"><div class="file"><span>Cómo se marca el enlace activo</span></div><pre>&lt;NavLink to=<span class="s">"/proyectos"</span>
+  className={({ isActive }) =&gt; isActive ? <span class="s">'text-bone-100'</span> : <span class="s">'text-ash-300'</span>}&gt;
+  Proyectos
+&lt;/NavLink&gt;</pre></div>
+        <ul class="lines">
+          <li><code>to="/proyectos"</code><span>A dónde lleva el enlace.</span></li>
+          <li><code>isActive ? A : B</code><span>Esto se lee "¿estoy en esta página? Si sí, usa A; si no, usa B". El signo <code>?</code> es una pregunta corta.</span></li>
+        </ul>
+        <div class="box oops"><span class="label">Qué salió mal</span><p>La primera versión cerraba el menú del celular con una orden "cuando cambie la página, ciérrate". La herramienta de revisión de código (el <em>linter</em>) nos avisó de que eso hace trabajar de más a la página. La solución fue más inteligente: el menú recuerda <em>en qué página se abrió</em>; si estás en otra, está cerrado. Sin órdenes extra.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="inicio" data-title="Inicio: la portada">
+        <div class="step-head"><span class="step-num">CAPÍTULO 9</span><h2>Inicio: la portada</h2></div>
+        <div class="wire" aria-hidden="true">
+          <div class="row"><div><b>Texto</b><br>nombre · título · botones</div><div><b>Ilustración</b><br>ruinas que se funden a negro</div></div>
+          <div><b>Minijuego Echo Collector</b><span>intro · juego · marcador</span></div>
+          <div class="row"><div><b>Proyecto 1</b></div><div><b>Proyecto 2</b></div></div>
+        </div>
+        <h3>La ilustración que se funde con el fondo</h3>
+        <p>La imagen de las ruinas está a la derecha y se va volviendo negra hacia la izquierda, hasta mezclarse con el fondo. No editamos la imagen: le pusimos una <strong>máscara</strong>.</p>
+        <div class="box simple"><span class="label">En simple</span><p>Una máscara es como mirar la foto a través de un vidrio pintado con degradado: donde el vidrio es negro ves la foto, donde es transparente la foto desaparece.</p></div>
+        <div class="code"><div class="file"><span>La máscara (CSS)</span></div><pre>mask-image: linear-gradient(to right, transparent, black 22%);</pre></div>
+        <ul class="lines">
+          <li><code>linear-gradient(to right, ...)</code><span>Un degradado que va de izquierda a derecha.</span></li>
+          <li><code>transparent, black 22%</code><span>Empieza invisible y a partir del 22 % del ancho la foto ya se ve completa.</span></li>
+        </ul>
+        <h3>Primero el celular</h3>
+        <p>En el celular no hay espacio para texto e imagen lado a lado, así que la imagen va <em>arriba</em> y se funde hacia abajo. Escribimos los estilos pensando primero en la pantalla pequeña, y luego agregamos <code>lg:</code> para cambiar lo necesario en pantallas grandes. A esto se le llama <strong>mobile-first</strong>.</p>
+        <h3>Animación al bajar</h3>
+        <p>Cada sección aparece con un suave movimiento hacia arriba cuando llega a la pantalla. Lo hace un componente llamado <code>Reveal</code> que "vigila" si la sección ya está visible, usando una herramienta del navegador llamada <code>IntersectionObserver</code> (literalmente, "observador de cruces").</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="proyectos" data-title="Proyectos: datos y tarjetas">
+        <div class="step-head"><span class="step-num">CAPÍTULO 10</span><h2>Proyectos: datos y tarjetas</h2></div>
+        <p>Aquí aprendimos una lección muy útil: <strong>separar la información de la forma de mostrarla</strong>.</p>
+        <p>Los datos de los proyectos (título, descripción, imágenes) viven en un archivo aparte, como una ficha:</p>
+        <div class="code"><div class="file"><span>src/features/projects/data/projects.ts (resumido)</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">export const</span> PROJECTS = [
+  {
+    slug: <span class="s">'echoes'</span>,
+    title: <span class="s">'Echoes'</span>,
+    tags: [<span class="s">'Unity'</span>, <span class="s">'C#'</span>, <span class="s">'UI Toolkit'</span>, <span class="s">'Audio'</span>],
+    description: <span class="s">'Un juego de suspenso narrativo en 2D...'</span>,
+    image: { src: echoesMenu, alt: <span class="s">'Menú principal de Echoes...'</span> },
+  },
+  <span class="c">// ...y aquí el siguiente proyecto</span>
+]</pre></div>
+        <ul class="lines">
+          <li><code>[ ... ]</code><span>Los corchetes son una <strong>lista</strong>. Cada proyecto es un elemento.</span></li>
+          <li><code>{ slug: ..., title: ... }</code><span>Las llaves son una <strong>ficha</strong> (un objeto) con campos que tienen nombre y valor.</span></li>
+          <li><code>alt: '...'</code><span>La descripción de la imagen para quien no puede verla (por ejemplo, personas ciegas que usan un lector de pantalla).</span></li>
+        </ul>
+        <p>Y el componente de la lista solo <strong>recorre</strong> esas fichas y dibuja una tarjeta por cada una:</p>
+        <div class="code"><div class="file"><span>ProjectGrid.tsx (resumido)</span></div><pre>{PROJECTS.map((project) =&gt; (
+  &lt;ProjectCard key={project.slug} project={project} /&gt;
+))}</pre></div>
+        <ul class="lines">
+          <li><code>PROJECTS.map(...)</code><span><em>Map</em> significa "para cada elemento de la lista, haz esto". Aquí: "para cada proyecto, dibuja una tarjeta".</span></li>
+          <li><code>key={project.slug}</code><span>Una etiqueta única para que React sepa cuál tarjeta es cuál si la lista cambia.</span></li>
+        </ul>
+        <div class="box why"><span class="label">Por qué</span><p>Para agregar un proyecto nuevo, Laura solo tiene que añadir una ficha más al archivo de datos. No toca ningún diseño. La tarjeta y la página de detalle aparecen solas.</p></div>
+        <h3>La tarjeta y el detalle</h3>
+        <ul>
+          <li><strong>Tarjeta:</strong> imagen a la izquierda, título, etiquetas separadas por rayitas, descripción y botón "Ver proyecto". En el celular, todo en una columna.</li>
+          <li><strong>Detalle:</strong> etiquetas como "Game Jam · 48 h", la descripción, un recuadro <em>"Mi aporte"</em> que explica qué hizo Laura dentro del equipo, una sección desplegable con más información, un botón para jugar en Unity Play y una galería de capturas.</li>
+          <li><strong>Portada con logo:</strong> si un proyecto no tiene una imagen buena para la portada, la ficha puede decir <code>image: { logo: 'unity' }</code> y se muestra el logo de Unity.</li>
+        </ul>
+        <div class="box oops"><span class="label">Qué salió mal</span><p>Cuando un proyecto tenía una sola captura, se veía enorme porque ocupaba todo el ancho. Lo arreglamos dejando siempre dos columnas: una sola imagen ocupa la mitad.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="sobre-mi" data-title="Sobre mí y el CV">
+        <div class="step-head"><span class="step-num">CAPÍTULO 11</span><h2>Sobre mí y el CV descargable</h2></div>
+        <p>Laura nos pasó su hoja de vida en PDF y la convertimos en datos, igual que los proyectos: una lista de experiencias, otra de estudios y otra de habilidades.</p>
+        <ul>
+          <li><strong>Línea de tiempo:</strong> cada trabajo o estudio es un punto en una línea vertical. El que está en curso lleva un destello que brilla.</li>
+          <li><strong>Habilidades</strong> agrupadas en cuatro columnas: Videojuegos, Web, Herramientas e Idiomas.</li>
+          <li><strong>Botón "Descargar CV".</strong></li>
+        </ul>
+        <h3>Cómo se hace un botón de descarga</h3>
+        <p>Pusimos el PDF en la carpeta <code>public/</code>. Todo lo que hay ahí se copia tal cual a la página publicada, así que el archivo queda en una dirección fija. Luego un enlace con el atributo <code>download</code>:</p>
+        <div class="code"><div class="file"><span>Enlace de descarga (HTML)</span><button class="copy" type="button">Copiar</button></div><pre>&lt;a href=<span class="s">"/cv/Laura-Munoz-Perez-CV.pdf"</span> download&gt;Descargar CV&lt;/a&gt;</pre></div>
+        <ul class="lines">
+          <li><code>href="/cv/..."</code><span>Dónde está el archivo.</span></li>
+          <li><code>download</code><span>Le dice al navegador "descárgalo" en lugar de abrirlo.</span></li>
+        </ul>
+        <div class="box why"><span class="label">Privacidad</span><p>No pusimos el teléfono de Laura en la página para evitar spam. Pero ojo: el PDF sí lo incluye. Cuando subas un documento a internet, revisa qué datos personales lleva.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="contacto" data-title="Contacto y 404">
+        <div class="step-head"><span class="step-num">CAPÍTULO 12</span><h2>Contacto y la página de error</h2></div>
+        <p><strong>Contacto</strong> tiene un formulario con nombre, correo y mensaje. Antes de enviar, el código <strong>revisa</strong> que todo esté bien:</p>
+        <div class="code"><div class="file"><span>validation.ts (resumido)</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">if</span> (values.name.trim().length &lt; 2) errors.name = <span class="s">'Escribe tu nombre.'</span></pre></div>
+        <ul class="lines">
+          <li><code>values.name</code><span>Lo que la persona escribió en el campo "nombre".</span></li>
+          <li><code>.trim()</code><span>Quita los espacios del principio y del final (así "   " no cuenta como nombre).</span></li>
+          <li><code>.length &lt; 2</code><span>¿Tiene menos de 2 letras?</span></li>
+          <li><code>errors.name = '...'</code><span>Si es así, guarda un mensaje de error que aparece debajo del campo.</span></li>
+        </ul>
+        <p>La página no tiene un servidor propio para enviar correos. Por eso, al enviar, abre el programa de correo de la persona con el mensaje ya escrito, usando un enlace <code>mailto:</code>.</p>
+        <p><strong>La página 404</strong> aparece si alguien escribe una dirección que no existe. En lugar del aburrido "Not found", dice <em>"Un eco perdido."</em> con el mismo estilo del sitio y un botón para volver.</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="musica" data-title="La música de fondo">
+        <div class="step-head"><span class="step-num">CAPÍTULO 13</span><h2>La música de fondo</h2></div>
+        <p>Abajo a la derecha hay un pequeño reproductor: botón de play/pausa, unas barritas que bailan cuando suena y un control de volumen.</p>
+        <ul>
+          <li>La canción se repite sola (<code>audio.loop = true</code>).</li>
+          <li>Cuando empieza o se pausa, el volumen sube o baja poco a poco (un <strong>fundido</strong>) para que no sea brusco.</li>
+          <li>El volumen que elijas se <strong>recuerda</strong> para la próxima visita, guardándolo en el navegador (<code>localStorage</code>, una pequeña libreta que cada página tiene en tu navegador).</li>
+        </ul>
+        <div class="box oops"><span class="label">Qué salió mal (y una regla del navegador)</span>
+          <p>Laura quería que la música sonara sola al entrar. Pero los navegadores <strong>no lo permiten</strong>: una página no puede hacer sonar audio hasta que la persona hace algo (un clic, tocar la pantalla, una tecla). Es una regla para que las páginas no te sorprendan con ruido.</p>
+          <p>La solución: la página intenta sonar al cargar y, si el navegador lo bloquea, empieza con el primer clic en cualquier parte.</p>
+          <p>Además encontramos un error raro: al hacer el fundido, a veces el volumen se calculaba como <code>-0.0015</code> (¡negativo!) y el navegador fallaba. Lo arreglamos obligando a que el número siempre quede entre 0 y 1.</p>
+        </div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+<!-- ======================= PARTE 4 ======================= -->
+      <div class="part-head" data-part="El minijuego">
+        <span class="k">PARTE 4</span>
+        <h2>El minijuego, desde cero</h2>
+        <p>Cómo se hace un juego de plataformas sin ningún motor de videojuegos: solo una hoja en blanco y matemáticas sencillas.</p>
+      </div>
+
+      <section class="step" id="juego-reglas" data-title="Las reglas del juego">
+        <div class="step-head"><span class="step-num">CAPÍTULO 14</span><h2>Las reglas del juego</h2></div>
+        <p><strong>Echo Collector</strong> ("recolector de ecos") es simple: hay 8 cristales brillantes flotando. Tienes que tocarlos todos lo más rápido posible.</p>
+        <ul>
+          <li><strong>Moverse:</strong> flechas ← → o las teclas A y D.</li>
+          <li><strong>Saltar:</strong> barra espaciadora o W. Tres de los cristales están altos y hay que saltar.</li>
+          <li><strong>En el celular:</strong> tocar el lado izquierdo o derecho para moverse y deslizar el dedo hacia arriba para saltar.</li>
+        </ul>
+        <p>El juego tiene tres <strong>estados</strong>, como un semáforo:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Estado</th><th>Qué pasa</th></tr></thead>
+          <tbody>
+            <tr><td><code>idle</code> (en espera)</td><td>La escena está quieta y el botón dice "Jugar".</td></tr>
+            <tr><td><code>playing</code> (jugando)</td><td>El reloj corre y puedes moverte.</td></tr>
+            <tr><td><code>finished</code> (terminado)</td><td>Muestra tu tiempo, guarda tu mejor marca y el botón dice "Jugar de nuevo".</td></tr>
+          </tbody>
+        </table></div>
+        <h3>¿Dónde se dibuja un juego en una página web?</h3>
+        <p>En un <strong>canvas</strong> (lienzo). Es una etiqueta HTML que es literalmente una hoja en blanco donde JavaScript puede pintar: rectángulos, círculos, imágenes. No hay botones ni textos ahí dentro: solo píxeles.</p>
+        <div class="box simple"><span class="label">En simple</span><p>El resto de la página es como armar con piezas de Lego. El canvas es como un tablero de dibujo: tú decides qué pintar en cada punto.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="bucle" data-title="El bucle: como un libro animado">
+        <div class="step-head"><span class="step-num">CAPÍTULO 15</span><h2>El bucle: como un libro animado</h2></div>
+        <p>¿Alguna vez hiciste un dibujo en la esquina de un cuaderno y pasaste las hojas rápido para verlo moverse? Los videojuegos funcionan <strong>exactamente así</strong>.</p>
+        <div class="frames" aria-hidden="true">
+          <div><small>1</small><span style="left:8%;top:60%"></span></div>
+          <div><small>2</small><span style="left:22%;top:38%"></span></div>
+          <div><small>3</small><span style="left:38%;top:24%"></span></div>
+          <div><small>4</small><span style="left:54%;top:24%"></span></div>
+          <div><small>5</small><span style="left:70%;top:38%"></span></div>
+          <div><small>6</small><span style="left:84%;top:60%"></span></div>
+        </div>
+        <p>Cada "hoja" se llama <strong>frame</strong> (fotograma). El juego dibuja unos <strong>60 frames por segundo</strong>. En cada uno hace siempre lo mismo, en este orden:</p>
+        <ol class="plain">
+          <li><strong>Leer</strong> qué teclas estás pulsando.</li>
+          <li><strong>Mover</strong> todo un poquito (el personaje, los cristales, las partículas).</li>
+          <li><strong>Revisar</strong> si el personaje tocó un cristal.</li>
+          <li><strong>Borrar</strong> el lienzo y <strong>dibujar</strong> todo en su nueva posición.</li>
+        </ol>
+        <p>Y vuelve a empezar. A eso se le llama <strong>bucle de juego</strong> (<em>game loop</em>).</p>
+        <div class="demo" id="loop-demo">
+          <span class="demo-title">Pruébalo · el bucle</span>
+          <canvas id="loop-canvas" aria-label="Una bola que cruza el lienzo; se puede cambiar cuántas veces por segundo se dibuja."></canvas>
+          <div class="controls c2">
+            <label for="fps">Frames por segundo <output id="fps-out">60</output>
+              <input id="fps" type="range" min="2" max="60" value="60">
+            </label>
+            <div class="btns"><button class="btn" id="loop-toggle" type="button">Pausar</button></div>
+          </div>
+          <p class="readout" id="loop-readout">Frames dibujados: <b>0</b></p>
+        </div>
+        <p>Baja los frames por segundo a 5 y verás la bola "a saltos", como un libro animado con pocas hojas. Con 60 parece movimiento continuo.</p>
+        <h3>El código del bucle</h3>
+        <div class="code"><div class="file"><span>engine/GameLoop.ts (simplificado)</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">function</span> <span class="n">tick</span>(now) {
+  <span class="k">const</span> dt = (now - lastTime) / 1000   <span class="c">// segundos desde el frame anterior</span>
+  lastTime = now
+  update(dt)                         <span class="c">// mover todo</span>
+  draw()                             <span class="c">// pintar todo</span>
+  requestAnimationFrame(tick)        <span class="c">// "llámame otra vez en el próximo frame"</span>
+}</pre></div>
+        <ul class="lines">
+          <li><code>requestAnimationFrame(tick)</code><span>Le pedimos al navegador: "cuando vayas a pintar la pantalla otra vez, ejecuta <em>tick</em>". Así el bucle se repite unas 60 veces por segundo.</span></li>
+          <li><code>dt</code><span>Viene de <em>delta time</em>: cuánto tiempo pasó desde el frame anterior. Normalmente 0,016 segundos.</span></li>
+        </ul>
+        <div class="box why"><span class="label">Por qué importa el dt</span><p>Hay pantallas que dibujan 60 veces por segundo y otras 144. Si el personaje avanzara "3 píxeles por frame", en la pantalla rápida correría más del doble de rápido. Si avanza "430 píxeles <em>por segundo</em> × dt", va igual de rápido en todas.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="gravedad" data-title="Caminar, saltar y caer">
+        <div class="step-head"><span class="step-num">CAPÍTULO 16</span><h2>Caminar, saltar y caer</h2></div>
+        <p>El personaje tiene una <strong>posición</strong> (dónde está) y una <strong>velocidad</strong> (hacia dónde y qué tan rápido va). En cada frame:</p>
+        <div class="code"><div class="file"><span>engine/Player.ts (simplificado)</span><button class="copy" type="button">Copiar</button></div><pre>vy += gravedad * dt          <span class="c">// la gravedad empuja hacia abajo</span>
+y  += vy * dt                <span class="c">// la velocidad cambia la posición</span>
+
+<span class="k">if</span> (y &gt;= suelo) {            <span class="c">// ¿atravesó el suelo?</span>
+  y = suelo                  <span class="c">//   lo ponemos encima</span>
+  vy = 0                     <span class="c">//   y se detiene</span>
+}
+
+<span class="k">if</span> (saltar &amp;&amp; enElSuelo) vy = -fuerzaDeSalto   <span class="c">// salto = empujón hacia arriba</span></pre></div>
+        <ul class="lines">
+          <li><code>vy</code><span>Velocidad vertical. En la pantalla, <strong>Y crece hacia abajo</strong> (al revés que en matemáticas del colegio). Por eso un número negativo significa "hacia arriba".</span></li>
+          <li><code>vy += gravedad * dt</code><span>Cada frame la velocidad hacia abajo aumenta un poco. Por eso, al saltar, subes cada vez más lento, te detienes y luego caes cada vez más rápido.</span></li>
+          <li><code>vy = -fuerzaDeSalto</code><span>Saltar es solo dar un empujón hacia arriba. La gravedad hace el resto: dibuja la curva sola.</span></li>
+        </ul>
+        <div class="demo" id="jump-demo">
+          <span class="demo-title">Pruébalo · gravedad y salto</span>
+          <canvas id="jump-canvas" aria-label="Una bola que salta: se puede cambiar la gravedad y la fuerza del salto."></canvas>
+          <div class="controls c3">
+            <label for="grav">Gravedad <output id="grav-out">2300</output>
+              <input id="grav" type="range" min="400" max="5000" step="100" value="2300">
+            </label>
+            <label for="jumpv">Fuerza del salto <output id="jumpv-out">860</output>
+              <input id="jumpv" type="range" min="300" max="1500" step="20" value="860">
+            </label>
+            <div class="btns"><button class="btn" id="jump-btn" type="button">Saltar</button></div>
+          </div>
+          <p class="readout" id="jump-readout">Altura máxima: <b>0</b> px</p>
+        </div>
+        <p>Prueba gravedad baja: parece que estás en la Luna. Gravedad alta y poco salto: no llegarías a los cristales altos.</p>
+        <h3>Trucos para que se sienta bien</h3>
+        <p>Los juegos de plataformas usan pequeños trucos invisibles que hacen que el control se sienta "justo":</p>
+        <ul>
+          <li><strong>Tiempo coyote:</strong> puedes saltar hasta 0,08 segundos <em>después</em> de salir del borde. Se llama así por el Coyote de los dibujos animados, que corre en el aire antes de caer.</li>
+          <li><strong>Memoria de salto:</strong> si pulsas saltar un instante <em>antes</em> de tocar el suelo, el juego lo recuerda y salta al aterrizar.</li>
+          <li><strong>Aceleración:</strong> el personaje no pasa de quieto a correr de golpe; acelera rapidísimo, pero no instantáneamente.</li>
+        </ul>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="colision" data-title="Tocar un cristal: cajas invisibles">
+        <div class="step-head"><span class="step-num">CAPÍTULO 17</span><h2>Tocar un cristal: cajas invisibles</h2></div>
+        <p>¿Cómo sabe el juego que tocaste un cristal? Revisar cada píxel del dibujo sería lentísimo. El truco: imaginamos una <strong>caja invisible</strong> alrededor del personaje y otra alrededor de cada cristal. Si las cajas se tocan, hubo choque.</p>
+        <p>Se llama <strong>colisión AABB</strong> (cajas alineadas a los ejes: sus lados siempre son horizontales y verticales).</p>
+        <div class="demo" id="aabb-demo">
+          <span class="demo-title">Pruébalo · arrastra la caja roja</span>
+          <canvas id="aabb-canvas" aria-label="Dos cajas; arrastra la roja sobre la clara para ver cuándo se tocan."></canvas>
+          <p class="readout" id="aabb-readout"></p>
+          <div class="btns">
+            <button class="btn ghost" type="button" data-move="-1,0">← Mover</button>
+            <button class="btn ghost" type="button" data-move="1,0">Mover →</button>
+            <button class="btn ghost" type="button" data-move="0,-1">↑ Subir</button>
+            <button class="btn ghost" type="button" data-move="0,1">↓ Bajar</button>
+          </div>
+        </div>
+        <p>Dos cajas se tocan si se cumplen <strong>las cuatro</strong> condiciones a la vez:</p>
+        <div class="code"><div class="file"><span>engine/Collision.ts</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">function</span> <span class="n">seTocan</span>(a, b) {
+  <span class="k">return</span> a.x &lt; b.x + b.ancho &amp;&amp;   <span class="c">// A empieza antes de que B termine</span>
+         a.x + a.ancho &gt; b.x &amp;&amp;   <span class="c">// A termina después de que B empieza</span>
+         a.y &lt; b.y + b.alto  &amp;&amp;   <span class="c">// lo mismo, pero en vertical</span>
+         a.y + a.alto  &gt; b.y
+}</pre></div>
+        <ul class="lines">
+          <li><code>&amp;&amp;</code><span>Significa "y". Las cuatro condiciones tienen que ser verdad.</span></li>
+          <li><code>a.x</code><span>Dónde empieza la caja A por la izquierda. <code>a.x + a.ancho</code> es dónde termina por la derecha.</span></li>
+        </ul>
+        <div class="box simple"><span class="label">En simple</span><p>Si una caja está completamente a la izquierda, a la derecha, arriba o abajo de la otra, no se tocan. Si no está en ninguno de esos casos, se están tocando.</p></div>
+        <p>Cuando el personaje toca un cristal: se marca como recogido, el marcador sube (<em>ECOS 03 / 08</em>), salen chispas y el cristal se desvanece.</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="detalles-juego" data-title="Cristales, chispas y récord">
+        <div class="step-head"><span class="step-num">CAPÍTULO 18</span><h2>Cristales, chispas y récord</h2></div>
+        <h3>Cristales que flotan</h3>
+        <p>Los cristales suben y bajan suavemente. Para eso usamos la función <strong>seno</strong> (<code>Math.sin</code>), que produce una ola: sube, baja, sube, baja, para siempre.</p>
+        <div class="code"><div class="file"><span>engine/Echo.ts (simplificado)</span></div><pre>y = alturaBase + Math.sin(tiempo * velocidad) * 6</pre></div>
+        <ul class="lines">
+          <li><code>Math.sin(...)</code><span>Da un número que va de -1 a 1 y vuelve, como una ola.</span></li>
+          <li><code>* 6</code><span>Lo multiplicamos por 6 para que el cristal suba y baje 6 píxeles.</span></li>
+        </ul>
+        <p>Cada cristal empieza la ola en un momento distinto, así no flotan todos al mismo ritmo, como si fueran soldados.</p>
+        <h3>Las chispas (partículas)</h3>
+        <p>Al recoger un cristal salen 16 puntitos de luz en todas direcciones. Cada uno es una <strong>partícula</strong>: un objeto mínimo con posición, velocidad y "vida". Cada frame se mueve un poco, se frena y pierde vida. Cuando su vida llega a cero, desaparece.</p>
+        <h3>React y el juego: dos mundos separados</h3>
+        <p>Una decisión importante: <strong>el juego no sabe que existe React</strong>. Es código JavaScript puro que solo dibuja en el lienzo. React se encarga del resto de la página (el marcador, el botón).</p>
+        <p>Se comunican con <strong>avisos</strong> (callbacks). El juego avisa "recogió un cristal", "pasó una décima de segundo" o "terminó", y React actualiza el marcador.</p>
+        <div class="box why"><span class="label">Por qué no actualizar el marcador 60 veces por segundo</span><p>Cada vez que React actualiza algo en la pantalla tiene trabajo extra. El reloj solo se actualiza 10 veces por segundo: el ojo no nota la diferencia y la página trabaja 6 veces menos.</p></div>
+        <h3>El récord</h3>
+        <p>Al terminar, el mejor tiempo se guarda en <code>localStorage</code> (la libreta del navegador). La próxima vez que juegues, lo recuerda. Siempre lo envolvemos en un <code>try/catch</code> ("intenta; si falla, no pasa nada") porque en algunos navegadores, como en modo incógnito, esa libreta puede no estar disponible.</p>
+        <h3>Detalles que casi nadie nota</h3>
+        <ul>
+          <li>El lienzo se dibuja en <strong>alta resolución</strong> en pantallas nítidas (como las de los celulares), para que no se vea borroso.</li>
+          <li>Si cambias de pestaña, el juego se <strong>pausa</strong> solo.</li>
+          <li>Las teclas solo funcionan cuando el juego está activo. Si estás escribiendo en el formulario de contacto, la barra espaciadora no hace saltar a nadie.</li>
+        </ul>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+<!-- ======================= PARTE 5 ======================= -->
+      <div class="part-head" data-part="Dar vida al personaje">
+        <span class="k">PARTE 5</span>
+        <h2>Dar vida al personaje</h2>
+        <p>El personaje era <strong>una sola imagen quieta</strong>. Todo su movimiento (capa, piernas, brazos, polvo) lo creamos con código.</p>
+      </div>
+
+      <section class="step" id="anim-idea" data-title="El problema y la idea">
+        <div class="step-head"><span class="step-num">CAPÍTULO 19</span><h2>El problema: una foto que tiene que moverse</h2></div>
+        <p>En los juegos normales, el personaje se anima como un dibujo animado: alguien dibuja 6 u 8 imágenes de cada movimiento (caminar, saltar…) y el juego las pasa rápido. Esas imágenes juntas se llaman <strong>hoja de sprites</strong>.</p>
+        <p>Nosotros solo teníamos <strong>una</strong> imagen de la encapuchada. Así que hicimos que el código la deformara, la moviera y le dibujara partes nuevas. A eso se le llama <strong>animación procedural</strong>: el movimiento se calcula en lugar de dibujarse a mano.</p>
+        <p>No salió bien a la primera. Lo fuimos mejorando con lo que decía quien lo probaba:</p>
+        <ol class="iter">
+          <li><span class="v">v1</span><span>El personaje rebota al correr, se inclina y se voltea según la dirección. <span class="fb">"La capa se ve muy quieta."</span></span></li>
+          <li><span class="v">v2</span><span>La capa ondea un poco. <span class="fb">"Se sigue viendo muy estática."</span></span></li>
+          <li><span class="v">v3</span><span>La capa ondea mucho más, rebota y tiene inercia. Aparece el polvo. <span class="fb">"Al voltearse parece una hoja de papel."</span></span></li>
+          <li><span class="v">v4</span><span>Nuevo giro: rápido, con frenada y polvo.</span></li>
+          <li><span class="v">v5</span><span>Piernas nuevas que se mueven. <span class="fb">"Las piernas no se mueven."</span></span></li>
+          <li><span class="v">v6</span><span>El salto con impulso y polvo al caer.</span></li>
+          <li><span class="v">v7</span><span>Movimiento en el aire. <span class="fb">"En el aire parece un palo."</span></span></li>
+          <li><span class="v">v8</span><span>Brazos que se mueven. <span class="fb">"¿Y las manos?"</span></span></li>
+        </ol>
+        <div class="box simple"><span class="label">Lección</span><p>Ningún programador lo hace perfecto la primera vez. Se hace algo, se prueba, se escucha lo que falla y se mejora. Esto se llama <strong>iterar</strong>.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="anim-cuerpo" data-title="Estirar, aplastar y rebotar">
+        <div class="step-head"><span class="step-num">CAPÍTULO 20</span><h2>Estirar, aplastar y rebotar</h2></div>
+        <p>Los animadores de dibujos animados tienen unos "principios" desde hace casi cien años. Usamos varios, solo cambiando el tamaño de la imagen:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Truco</th><th>Qué hace el personaje</th><th>Por qué funciona</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Aplastar</strong></td><td>Al aterrizar se hace más bajito y más ancho un instante.</td><td>Se siente el peso del golpe.</td></tr>
+            <tr><td><strong>Estirar</strong></td><td>Al despegar se hace más alto y delgado.</td><td>Se siente la velocidad.</td></tr>
+            <tr><td><strong>Anticipación</strong></td><td>Antes de saltar se agacha 0,07 segundos.</td><td>Igual que una persona real: para saltar primero doblas las rodillas.</td></tr>
+            <tr><td><strong>Rebote al correr</strong></td><td>Sube y baja con cada paso.</td><td>Al correr, el cuerpo no va en línea recta.</td></tr>
+            <tr><td><strong>Inclinación</strong></td><td>Se inclina hacia delante al correr.</td><td>Así corremos las personas.</td></tr>
+            <tr><td><strong>Respiración</strong></td><td>Quieta, crece y encoge muy poquito.</td><td>Algo totalmente quieto parece muerto.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="code"><div class="file"><span>engine/BodyPose.ts (idea simplificada)</span></div><pre>altoDelDibujo  = 1 - aplastado + estirado
+anchoDelDibujo = 1 + aplastado - estirado</pre></div>
+        <ul class="lines">
+          <li><code>1</code><span>Tamaño normal (100 %).</span></li>
+          <li><code>- aplastado</code><span>Al aterrizar, <em>aplastado</em> vale por ejemplo 0,3: el dibujo queda al 70 % de alto. Luego ese número baja a 0 poco a poco y el personaje recupera su forma.</span></li>
+          <li><code>+ aplastado</code><span>En el ancho se suma: cuando algo se aplasta, se ensancha. Así parece hecho de algo blando y no de cartón.</span></li>
+        </ul>
+        <h3>El giro: lo que salió mal</h3>
+        <p>Para que el personaje mire al otro lado, al principio lo hacíamos "adelgazar" hasta desaparecer y volver a aparecer al revés. Parecía <strong>una hoja de papel girando</strong>.</p>
+        <p>La solución, que usan casi todos los juegos de plataformas: voltearlo <strong>de golpe</strong> en un solo frame (el ojo no lo nota) y tapar el cambio con movimiento: una frenada con un brinquito, la capa que da un latigazo y un poco de polvo, como si derrapara.</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="anim-capa" data-title="La capa: resortes invisibles">
+        <div class="step-head"><span class="step-num">CAPÍTULO 21</span><h2>La capa: resortes invisibles</h2></div>
+        <h3>Paso 1: partir la imagen en trocitos</h3>
+        <p>Para que la capa ondee sin que se deforme la cara, partimos la imagen en una <strong>cuadrícula</strong> de 14 × 10 cuadritos, como un mosaico. Cada esquina del mosaico puede moverse un poco, y la imagen se estira entre ellas como una tela.</p>
+        <p>Cada esquina tiene un <strong>peso</strong> que dice cuánto se mueve:</p>
+        <ul>
+          <li>En la <strong>cara y el cuerpo</strong>: peso 0, no se mueve nada.</li>
+          <li>En la <strong>punta de abajo de la capa</strong>: peso máximo, se mueve mucho.</li>
+          <li>En el <strong>cuello</strong>: casi nada, porque la capa cuelga de los hombros.</li>
+        </ul>
+        <h3>Paso 2: ¿cuánto se mueve? Un resorte</h3>
+        <p>Una tela de verdad no sigue al cuerpo al instante: se retrasa, se pasa de largo y rebota. Para imitarlo usamos un <strong>resorte</strong> matemático.</p>
+        <div class="box simple"><span class="label">En simple</span><p>Imagina una bola atada a un elástico. Si mueves la mano, la bola la sigue con retraso, se pasa y rebota hasta calmarse. La <strong>rigidez</strong> es lo duro que es el elástico. La <strong>amortiguación</strong> es como meter la bola en miel: frena el rebote.</p></div>
+        <div class="demo" id="spring-demo">
+          <span class="demo-title">Pruébalo · el resorte de la capa</span>
+          <canvas id="spring-canvas" aria-label="Un punto que persigue a un objetivo que cambia de lado, con resorte."></canvas>
+          <div class="controls c3">
+            <label for="k">Rigidez (elástico) <output id="k-out">140</output>
+              <input id="k" type="range" min="20" max="400" value="140">
+            </label>
+            <label for="c">Amortiguación (miel) <output id="c-out">7</output>
+              <input id="c" type="range" min="1" max="40" value="7">
+            </label>
+            <div class="btns"><button class="btn" id="kick" type="button">Dar un latigazo</button></div>
+          </div>
+          <p class="readout" id="readout"></p>
+        </div>
+        <p>La línea punteada es <strong>a dónde quiere ir</strong> la capa (el objetivo). El punto es <strong>dónde está</strong>. Con poca miel rebota mucho; con mucha, llega despacio y sin rebotar. La capa usa poca miel, para que rebote al aterrizar.</p>
+        <div class="code"><div class="file"><span>engine/Cape.ts — el resorte completo</span><button class="copy" type="button">Copiar</button></div><pre><span class="k">const</span> aceleracion = rigidez * (objetivo - valor)
+                  - amortiguacion * velocidad
+velocidad += aceleracion * dt
+valor     += velocidad * dt</pre></div>
+        <ul class="lines">
+          <li><code>rigidez * (objetivo - valor)</code><span>Cuanto más lejos está del objetivo, más fuerte tira el elástico.</span></li>
+          <li><code>- amortiguacion * velocidad</code><span>La miel: cuanto más rápido se mueve, más lo frena.</span></li>
+          <li><code>velocidad += ...</code> y <code>valor += ...</code><span>Las mismas dos líneas que usamos para la gravedad. ¡Todo el movimiento del juego sale de esta misma idea!</span></li>
+        </ul>
+        <p>La capa tiene dos resortes: uno para <strong>estirarse hacia atrás</strong> (al correr, y hacia delante al frenar, por inercia) y otro para <strong>subir o bajar</strong> (cuelga al subir, flota al caer, rebota al aterrizar). Además le sumamos una ola que siempre recorre la tela.</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="anim-piernas" data-title="Piernas y brazos de palitos">
+        <div class="step-head"><span class="step-num">CAPÍTULO 22</span><h2>Piernas y brazos de palitos</h2></div>
+        <p>Las piernas estaban pintadas dentro de la imagen, así que no se podían mover. La solución tuvo dos pasos:</p>
+        <ol class="plain">
+          <li><strong>Esconder</strong> la parte de la imagen donde estaban las piernas (y un brazo), con un recorte. Para saber exactamente dónde estaban, leímos los píxeles de la imagen con código.</li>
+          <li><strong>Dibujar</strong> piernas nuevas encima, como un muñeco de palitos con bisagras: muslo, rodilla, espinilla y bota.</li>
+        </ol>
+        <p>Cada pierna se describe con solo <strong>dos ángulos</strong>: cuánto gira la cadera y cuánto se dobla la rodilla.</p>
+        <div class="demo" id="leg-demo">
+          <span class="demo-title">Pruébalo · el ciclo de la carrera</span>
+          <canvas id="leg-canvas" aria-label="Dos piernas de palitos que corren; se puede mover el ciclo a mano."></canvas>
+          <div class="controls c2">
+            <label for="phase">Momento del paso <output id="phase-out">0°</output>
+              <input id="phase" type="range" min="0" max="360" value="0">
+            </label>
+            <div class="btns"><button class="btn" id="leg-play" type="button">Correr solo</button></div>
+          </div>
+        </div>
+        <div class="code"><div class="file"><span>engine/Legs.ts (simplificado)</span></div><pre><span class="k">const</span> balanceo = Math.sin(fase) * zancada
+piernaDelantera.cadera = balanceo
+piernaTrasera.cadera   = -balanceo       <span class="c">// la otra, al revés</span>
+piernaDelantera.rodilla = -Math.max(0, Math.cos(fase)) * flexion</pre></div>
+        <ul class="lines">
+          <li><code>Math.sin(fase)</code><span>Otra vez la ola: la pierna va adelante y atrás.</span></li>
+          <li><code>-balanceo</code><span>La otra pierna hace lo contrario. ¡Así se camina!</span></li>
+          <li><code>Math.max(0, Math.cos(fase))</code><span>La rodilla solo se dobla cuando la pierna va hacia delante (cuando la levantas para dar el paso).</span></li>
+        </ul>
+        <h3>Los brazos</h3>
+        <p>Igual que las piernas, pero con hombro, codo y mano. Al correr, cada brazo va <strong>al revés que su pierna</strong>, como cuando corres de verdad. Antes de saltar se van hacia atrás para tomar impulso; al subir van adelante; al caer se abren para mantener el equilibrio.</p>
+        <h3>En el aire</h3>
+        <p>"En el aire parece un palo" fue el comentario. El problema: cuando el personaje está en el punto más alto, casi no se mueve, y su velocidad es cero, así que todo lo que dependía de la velocidad se quedaba quieto. Lo arreglamos agregando movimiento que <strong>siempre</strong> está activo en el aire: las piernas pedalean, los brazos aletean, el cuerpo se balancea y la capa ondea a tope.</p>
+        <div class="box oops"><span class="label">Qué salió mal</span>
+          <ul>
+            <li>Al saltar, el brazo pasaba por delante de la cara y la tapaba. Bajamos su ángulo.</li>
+            <li>Las piernas y mangas eran tan oscuras que desaparecían sobre el fondo negro. Les pusimos un borde un poquito más claro.</li>
+          </ul>
+        </div>
+        <h3>El polvo</h3>
+        <p>Usa las mismas partículas que las chispas de los cristales, pero grises, más grandes y que suben flotando. Salen con cada paso, al girar, al despegar y, sobre todo, al aterrizar: cuanto más alta la caída, más polvo.</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+<!-- ======================= PARTE 6 ======================= -->
+      <div class="part-head" data-part="Terminar bien">
+        <span class="k">PARTE 6</span>
+        <h2>Terminar bien</h2>
+        <p>Que funcione para todos, comprobar que no hay errores y compartirlo.</p>
+      </div>
+
+      <section class="step" id="accesible" data-title="Una página para todos">
+        <div class="step-head"><span class="step-num">CAPÍTULO 23</span><h2>Una página para todos</h2></div>
+        <p>La <strong>accesibilidad</strong> es hacer que la página sirva también para personas con alguna dificultad: que no ven, que no usan ratón, o a las que el movimiento les marea.</p>
+        <ul>
+          <li><strong>Lectores de pantalla:</strong> las personas ciegas usan un programa que lee la página en voz alta. Por eso cada imagen tiene una descripción (<code>alt</code>), y los adornos (rombos, destellos) están marcados para que el lector los salte.</li>
+          <li><strong>El juego también se describe:</strong> el lienzo dice en voz alta cosas como "3 de 8 ecos recogidos".</li>
+          <li><strong>Solo teclado:</strong> todo se puede usar con la tecla Tab, y siempre se ve en qué elemento estás.</li>
+          <li><strong>Movimiento reducido:</strong> hay personas que en su sistema activan "reducir movimiento" porque las animaciones les marean. La página lo detecta y apaga los destellos, las olas de la capa y los cristales flotantes. El juego sigue funcionando.</li>
+        </ul>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="comprobar" data-title="Comprobar que funciona">
+        <div class="step-head"><span class="step-num">CAPÍTULO 24</span><h2>Comprobar que funciona</h2></div>
+        <p>Después de cada cambio usamos dos comandos:</p>
+        <div class="code"><div class="file"><span>Terminal</span><button class="copy" type="button">Copiar</button></div><pre>npm run build   <span class="c"># prepara la versión final y revisa los tipos</span>
+npm run lint    <span class="c"># revisa el código buscando errores y malas prácticas</span></pre></div>
+        <p>Si alguno muestra un error, no se sigue hasta arreglarlo.</p>
+        <p>Pero que el código no tenga errores no significa que <em>se vea</em> bien. Así que hicimos un pequeño programa que abre Chrome sin ventana y:</p>
+        <ul>
+          <li>Toma fotos de la página en tamaño computador y celular, para compararlas con el mockup.</li>
+          <li>Revisa que en el celular no haya que deslizar hacia los lados.</li>
+          <li><strong>Juega una partida completa solo</strong>, pulsando teclas, hasta ver "Jugar de nuevo" y el récord guardado.</li>
+          <li>Hace fotos ampliadas del personaje en cada momento del salto para revisar la animación.</li>
+        </ul>
+        <div class="box oops"><span class="label">Qué salió mal</span><p>Una foto "de celular" parecía cortada a la derecha. ¿Un error? No: el Chrome sin ventana tiene un ancho mínimo. Medimos el ancho real de la página y confirmamos que todo cabía. Lección: antes de arreglar algo, comprueba que de verdad está roto.</p></div>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="compartir" data-title="Verlo en el celular">
+        <div class="step-head"><span class="step-num">CAPÍTULO 25</span><h2>Verlo en el celular y publicarlo</h2></div>
+        <p>Mientras trabajas, la página solo existe en tu computador (<code>localhost</code> significa "este mismo computador"). Para verla desde el celular conectado al mismo wifi:</p>
+        <div class="code"><div class="file"><span>Terminal</span><button class="copy" type="button">Copiar</button></div><pre>npm run dev -- --host
+<span class="c">#  ➜  Network: http://192.168.1.10:5173/   ← abre esta en el celular</span></pre></div>
+        <p><code>--host</code> le dice al servidor: "acepta visitas de otros aparatos de la casa". El número es la dirección del computador dentro de tu red.</p>
+        <p>Para publicarla en internet de verdad, se usa <code>npm run build</code>, que crea una carpeta <code>dist/</code> con la versión final, y esa carpeta se sube a un servicio de alojamiento (Netlify, Vercel, GitHub Pages…).</p>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <section class="step" id="ejercicios" data-title="Ejercicios y glosario">
+        <div class="step-head"><span class="step-num">CAPÍTULO 26</span><h2>Ejercicios y glosario</h2></div>
+        <p>La mejor forma de aprender es tocar el código. Empieza por los fáciles:</p>
+        <ul class="exercises">
+          <li><input type="checkbox" id="ex1"><label for="ex1"><span class="lvl">MUY FÁCIL</span><br>Abre <code>src/features/projects/data/projects.ts</code> y cambia la descripción de un proyecto. Guarda y mira cómo cambia la página sola.</label></li>
+          <li><input type="checkbox" id="ex2"><label for="ex2"><span class="lvl">FÁCIL</span><br>En <code>src/app/styles/index.css</code>, cambia <code>--color-wine-500</code> por un azul (por ejemplo <code>#2a4e8e</code>). ¿Qué partes cambian?</label></li>
+          <li><input type="checkbox" id="ex3"><label for="ex3"><span class="lvl">FÁCIL</span><br>En <code>engine/config.ts</code>, pon <code>gravity: 900</code>. ¿Cómo se siente el salto? Vuelve a dejarlo como estaba.</label></li>
+          <li><input type="checkbox" id="ex4"><label for="ex4"><span class="lvl">MEDIO</span><br>Agrega un tercer proyecto copiando la ficha de otro. Cambia el <code>slug</code> y comprueba que su página <code>/proyectos/tu-slug</code> funciona.</label></li>
+          <li><input type="checkbox" id="ex5"><label for="ex5"><span class="lvl">MEDIO</span><br>En <code>config.ts</code>, cambia <code>ECHO.count</code> a 12 y el <code>pattern</code> para que tenga 12 valores. Ahora hay que recoger 12 ecos.</label></li>
+          <li><input type="checkbox" id="ex6"><label for="ex6"><span class="lvl">RETO</span><br>Agrega un enemigo que vaya de un lado a otro. Si el personaje lo toca (usa la misma función de las cajas), la partida empieza de nuevo.</label></li>
+        </ul>
+        <h3>Glosario</h3>
+        <dl class="gloss">
+          <dt>componente</dt><dd>Pieza reutilizable de la página, como una pieza de Lego.</dd>
+          <dt>props</dt><dd>Los datos que le pasas a un componente para personalizarlo.</dd>
+          <dt>JSX</dt><dd>Escribir algo parecido a HTML dentro de JavaScript.</dd>
+          <dt>ruta</dt><dd>La dirección de una página dentro del sitio, como <code>/contacto</code>.</dd>
+          <dt>npm</dt><dd>La "tienda" de donde se descargan librerías.</dd>
+          <dt>canvas</dt><dd>Un lienzo en blanco donde JavaScript puede dibujar.</dd>
+          <dt>frame</dt><dd>Cada dibujo individual de una animación; el juego hace unos 60 por segundo.</dd>
+          <dt>game loop</dt><dd>El ciclo que se repite cada frame: leer teclas, mover, revisar choques, dibujar.</dd>
+          <dt>delta time (dt)</dt><dd>El tiempo que pasó desde el frame anterior.</dd>
+          <dt>colisión AABB</dt><dd>Saber si dos cajas invisibles se tocan.</dd>
+          <dt>partícula</dt><dd>Un puntito con posición, velocidad y vida, usado para chispas y polvo.</dd>
+          <dt>resorte</dt><dd>Un valor que persigue a un objetivo con retraso y rebote.</dd>
+          <dt>sprite</dt><dd>La imagen de un personaje u objeto de un juego.</dd>
+          <dt>procedural</dt><dd>Generado con cálculos en lugar de dibujado a mano.</dd>
+          <dt>localStorage</dt><dd>Una pequeña libreta que cada página tiene en tu navegador para recordar cosas.</dd>
+          <dt>linter</dt><dd>Un programa que revisa tu código y te avisa de errores y malas prácticas.</dd>
+          <dt>mobile-first</dt><dd>Diseñar primero para el celular y luego ampliar para pantallas grandes.</dd>
+        </dl>
+        <button class="mark-done" type="button">Marcar como leído</button>
+      </section>
+
+      <footer class="end">
+        <p>Portfolio de Laura Muñoz Pérez · Desarrolladora de Videojuegos (Unity). Si quieres el detalle técnico completo, está en el archivo <code>README.md</code> del proyecto.</p>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(() => {
+  const STORE_KEY = 'bitacora-progreso-v2'
+  const read = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}') } catch { return {} } }
+  const write = (v) => { try { localStorage.setItem(STORE_KEY, JSON.stringify(v)) } catch {} }
+  const state = read()
+  state.steps = state.steps || {}
+  state.ex = state.ex || {}
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const css = getComputedStyle(document.documentElement)
+  const col = (n) => css.getPropertyValue(n).trim()
+
+  // ---------- Índice con partes ----------
+  const main = document.getElementById('steps')
+  const list = document.getElementById('toc-list')
+  const steps = [...main.querySelectorAll('.step')]
+  const links = new Map()
+  let n = 0
+  ;[...main.children].forEach((el) => {
+    if (el.classList.contains('part-head')) {
+      const li = document.createElement('li')
+      li.className = 'part-label'
+      li.textContent = el.dataset.part
+      list.appendChild(li)
+    } else if (el.classList.contains('step')) {
+      n++
+      const li = document.createElement('li')
+      li.className = 'item'
+      li.innerHTML = '<span class="n">' + String(n).padStart(2, '0') + '</span>'
+      const a = document.createElement('a')
+      a.href = '#' + el.id
+      a.textContent = el.dataset.title
+      li.appendChild(a)
+      list.appendChild(li)
+      links.set(el.id, { a, li })
+    }
+  })
+  if (window.matchMedia('(max-width: 979px)').matches) document.getElementById('toc-details').open = false
+
+  const updateProgress = () => {
+    const done = steps.filter((s) => state.steps[s.id]).length
+    document.getElementById('progress-text').textContent = done + ' de ' + steps.length + ' capítulos leídos'
+    document.getElementById('progress-bar').style.width = (done / steps.length) * 100 + '%'
+    steps.forEach((s) => links.get(s.id).li.classList.toggle('is-done', !!state.steps[s.id]))
+  }
+  steps.forEach((s) => {
+    const btn = s.querySelector('.mark-done')
+    if (!btn) return
+    const sync = () => {
+      const on = !!state.steps[s.id]
+      btn.setAttribute('aria-pressed', String(on))
+      btn.textContent = on ? 'Leído ✓' : 'Marcar como leído'
+    }
+    btn.addEventListener('click', () => { state.steps[s.id] = !state.steps[s.id]; write(state); sync(); updateProgress() })
+    sync()
+  })
+  updateProgress()
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return
+        links.forEach(({ a }) => a.classList.remove('is-active'))
+        links.get(e.target.id).a.classList.add('is-active')
+      })
+    }, { rootMargin: '-20% 0px -70% 0px' })
+    steps.forEach((s) => io.observe(s))
+  }
+
+  document.querySelectorAll('.exercises input').forEach((cb) => {
+    cb.checked = !!state.ex[cb.id]
+    cb.addEventListener('change', () => { state.ex[cb.id] = cb.checked; write(state) })
+  })
+
+  // ---------- Copiar ----------
+  document.querySelectorAll('.copy').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pre = btn.closest('.code').querySelector('pre')
+      const done = (msg) => { btn.textContent = msg; setTimeout(() => { btn.textContent = 'Copiar' }, 1400) }
+      const fallback = () => {
+        const range = document.createRange(); range.selectNodeContents(pre)
+        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range)
+        done('Seleccionado')
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(pre.innerText).then(() => done('Copiado'), fallback)
+      else fallback()
+    })
+  })
+
+  // ---------- Utilidad para lienzos ----------
+  const setup = (id) => {
+    const canvas = document.getElementById(id)
+    const ctx = canvas.getContext('2d')
+    const s = { canvas, ctx, w: 0, h: 0 }
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1
+      const r = canvas.getBoundingClientRect()
+      s.w = r.width; s.h = r.height
+      canvas.width = Math.round(s.w * dpr); canvas.height = Math.round(s.h * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+    resize()
+    window.addEventListener('resize', resize)
+    return s
+  }
+  // Solo anima los lienzos visibles.
+  const visible = new Set()
+  const watch = (el, key) => {
+    if (!('IntersectionObserver' in window)) { visible.add(key); return }
+    new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting ? visible.add(key) : visible.delete(key))).observe(el)
+  }
+  const ground = (s, y) => {
+    s.ctx.strokeStyle = col('--line'); s.ctx.lineWidth = 1
+    s.ctx.beginPath(); s.ctx.moveTo(0, y); s.ctx.lineTo(s.w, y); s.ctx.stroke()
+  }
+  const glowDot = (ctx, x, y, r) => {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r * 3.5)
+    g.addColorStop(0, 'rgba(243,230,211,0.4)'); g.addColorStop(1, 'rgba(243,230,211,0)')
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 3.5, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = col('--glow'); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
+  }
+
+  // ---------- Demo 1: bucle ----------
+  const L = setup('loop-canvas'); watch(L.canvas, 'loop')
+  const fpsIn = document.getElementById('fps'), fpsOut = document.getElementById('fps-out')
+  const loopBtn = document.getElementById('loop-toggle'), loopRead = document.getElementById('loop-readout')
+  let loopRunning = !reduce, loopX = 0, loopFrames = 0, loopAcc = 0
+  loopBtn.textContent = loopRunning ? 'Pausar' : 'Reproducir'
+  fpsIn.addEventListener('input', () => { fpsOut.textContent = fpsIn.value })
+  loopBtn.addEventListener('click', () => { loopRunning = !loopRunning; loopBtn.textContent = loopRunning ? 'Pausar' : 'Reproducir' })
+  const drawLoop = () => {
+    const { ctx, w, h } = L
+    ctx.clearRect(0, 0, w, h)
+    ground(L, h - 30)
+    const x = 30 + (loopX % 1) * (w - 60)
+    glowDot(ctx, x, h - 30 - 18 - Math.abs(Math.sin(loopX * Math.PI * 3)) * 60, 8)
+    loopRead.innerHTML = 'Frames dibujados: <b>' + loopFrames + '</b>'
+  }
+  drawLoop()
+
+  // ---------- Demo 2: salto ----------
+  const J = setup('jump-canvas'); watch(J.canvas, 'jump')
+  const gIn = document.getElementById('grav'), jIn = document.getElementById('jumpv')
+  const gOut = document.getElementById('grav-out'), jOut = document.getElementById('jumpv-out')
+  const jRead = document.getElementById('jump-readout')
+  let jy = 0, jvy = 0, jPeak = 0, jTrail = [], jActive = false
+  gIn.addEventListener('input', () => { gOut.textContent = gIn.value })
+  jIn.addEventListener('input', () => { jOut.textContent = jIn.value })
+  const jump = () => { if (jy === 0) { jvy = -(+jIn.value) * 0.25; jPeak = 0; jTrail = []; jActive = true } }
+  document.getElementById('jump-btn').addEventListener('click', jump)
+  J.canvas.addEventListener('pointerdown', jump)
+  const stepJump = (dt) => {
+    jvy += (+gIn.value) * 0.25 * dt
+    jy += jvy * dt
+    if (jy >= 0) { jy = 0; jvy = 0; jActive = false }
+    jPeak = Math.max(jPeak, -jy)
+    jTrail.push(jy); if (jTrail.length > 70) jTrail.shift()
+  }
+  const drawJump = () => {
+    const { ctx, w, h } = J
+    ctx.clearRect(0, 0, w, h)
+    const gy = h - 24
+    ground(J, gy)
+    jTrail.forEach((t, i) => {
+      ctx.fillStyle = 'rgba(192,83,90,' + (i / jTrail.length) * 0.5 + ')'
+      ctx.beginPath(); ctx.arc(w / 2 - (jTrail.length - i) * 3, gy - 10 + Math.max(t, -(gy - 20)), 2.5, 0, Math.PI * 2); ctx.fill()
+    })
+    glowDot(ctx, w / 2, gy - 10 + Math.max(jy, -(gy - 20)), 9)
+    jRead.innerHTML = 'Altura máxima: <b>' + Math.round(jPeak) + '</b> px' + (jPeak > gy - 20 ? ' (¡se sale del lienzo!)' : '')
+  }
+  drawJump()
+
+  // ---------- Demo 3: colisión ----------
+  const A = setup('aabb-canvas')
+  const aRead = document.getElementById('aabb-readout')
+  const bBox = { x: 0, y: 0, w: 90, h: 70 }
+  const aBox = { x: 30, y: 30, w: 70, h: 50 }
+  const placeB = () => { bBox.x = A.w / 2 - 20; bBox.y = A.h / 2 - 35 }
+  placeB()
+  window.addEventListener('resize', placeB)
+  const drawAabb = () => {
+    const { ctx } = A
+    ctx.clearRect(0, 0, A.w, A.h)
+    const c1 = aBox.x < bBox.x + bBox.w, c2 = aBox.x + aBox.w > bBox.x
+    const c3 = aBox.y < bBox.y + bBox.h, c4 = aBox.y + aBox.h > bBox.y
+    const hit = c1 && c2 && c3 && c4
+    ctx.fillStyle = 'rgba(243,230,211,0.08)'; ctx.strokeStyle = col('--glow')
+    ctx.fillRect(bBox.x, bBox.y, bBox.w, bBox.h); ctx.strokeRect(bBox.x + .5, bBox.y + .5, bBox.w, bBox.h)
+    ctx.fillStyle = hit ? 'rgba(143,174,134,0.35)' : 'rgba(192,83,90,0.3)'
+    ctx.strokeStyle = hit ? col('--ok') : col('--accent')
+    ctx.fillRect(aBox.x, aBox.y, aBox.w, aBox.h); ctx.strokeRect(aBox.x + .5, aBox.y + .5, aBox.w, aBox.h)
+    ctx.fillStyle = col('--muted'); ctx.font = '11px ' + col('--font-mono')
+    ctx.fillText('cristal', bBox.x + 6, bBox.y + 16); ctx.fillText('personaje', aBox.x + 6, aBox.y + 16)
+    const yn = (v) => v ? '<span class="yes">sí</span>' : '<span class="no">no</span>'
+    aRead.innerHTML = (hit ? '<b>¡Se tocan!</b>' : '<b>No se tocan</b>') +
+      ' · A empieza antes del final de B: ' + yn(c1) + ' · A termina después del inicio de B: ' + yn(c2) +
+      ' · en vertical: ' + yn(c3) + ' y ' + yn(c4)
+  }
+  let drag = null
+  A.canvas.addEventListener('pointerdown', (e) => {
+    const r = A.canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top
+    if (x >= aBox.x && x <= aBox.x + aBox.w && y >= aBox.y && y <= aBox.y + aBox.h) {
+      drag = { dx: x - aBox.x, dy: y - aBox.y }; A.canvas.setPointerCapture(e.pointerId)
+    }
+  })
+  A.canvas.addEventListener('pointermove', (e) => {
+    if (!drag) return
+    const r = A.canvas.getBoundingClientRect()
+    aBox.x = Math.max(0, Math.min(A.w - aBox.w, e.clientX - r.left - drag.dx))
+    aBox.y = Math.max(0, Math.min(A.h - aBox.h, e.clientY - r.top - drag.dy))
+    drawAabb()
+  })
+  A.canvas.addEventListener('pointerup', () => { drag = null })
+  document.querySelectorAll('[data-move]').forEach((b) => b.addEventListener('click', () => {
+    const [dx, dy] = b.dataset.move.split(',').map(Number)
+    aBox.x = Math.max(0, Math.min(A.w - aBox.w, aBox.x + dx * 20))
+    aBox.y = Math.max(0, Math.min(A.h - aBox.h, aBox.y + dy * 15))
+    drawAabb()
+  }))
+  window.addEventListener('resize', drawAabb)
+  drawAabb()
+
+  // ---------- Demo 4: resorte ----------
+  const S = setup('spring-canvas'); watch(S.canvas, 'spring')
+  const kIn = document.getElementById('k'), cIn = document.getElementById('c')
+  const kOut = document.getElementById('k-out'), cOut = document.getElementById('c-out')
+  const sRead = document.getElementById('readout')
+  let sv = 0.2, svel = 0, starget = 0.8, sflip = 0
+  const strail = []
+  const describe = () => {
+    const k = +kIn.value, c = +cIn.value
+    kOut.textContent = k; cOut.textContent = c
+    const z = c / (2 * Math.sqrt(k))
+    sRead.innerHTML = z < 0.95 ? '<b>Rebota</b> · poca miel: se pasa del objetivo y vuelve, como la capa al aterrizar.'
+      : z < 1.05 ? '<b>Justo</b> · llega rápido y sin rebotar.'
+      : '<b>Lento</b> · mucha miel: llega despacio y sin rebotar.'
+  }
+  kIn.addEventListener('input', describe); cIn.addEventListener('input', describe); describe()
+  let springBurst = 0
+  document.getElementById('kick').addEventListener('click', () => { svel += starget > 0.5 ? -4 : 4; springBurst = 1.5 })
+  S.canvas.addEventListener('click', () => { starget = starget > 0.5 ? 0.2 : 0.8; springBurst = 2 })
+  const stepSpring = (dt) => {
+    const a = (+kIn.value) * (starget - sv) - (+cIn.value) * svel
+    svel += a * dt; sv += svel * dt
+    strail.push(sv); if (strail.length > 40) strail.shift()
+  }
+  const drawSpring = () => {
+    const { ctx, w, h } = S
+    ctx.clearRect(0, 0, w, h)
+    const pad = 28, x = (v) => pad + v * (w - pad * 2), y = h / 2
+    ground(S, y)
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = col('--muted')
+    ctx.beginPath(); ctx.moveTo(x(starget), 20); ctx.lineTo(x(starget), h - 20); ctx.stroke(); ctx.setLineDash([])
+    strail.forEach((t, i) => { ctx.fillStyle = 'rgba(192,83,90,' + (i / strail.length) * 0.35 + ')'; ctx.beginPath(); ctx.arc(x(t), y, 3, 0, Math.PI * 2); ctx.fill() })
+    glowDot(ctx, x(sv), y, 6)
+    ctx.fillStyle = col('--muted'); ctx.font = '11px ' + col('--font-mono')
+    ctx.fillText('objetivo', Math.min(x(starget) + 6, w - 60), 30)
+  }
+  drawSpring()
+
+  // ---------- Demo 5: piernas ----------
+  const G = setup('leg-canvas'); watch(G.canvas, 'leg')
+  const phIn = document.getElementById('phase'), phOut = document.getElementById('phase-out')
+  const legBtn = document.getElementById('leg-play')
+  let legAuto = !reduce, legPhase = 0
+  legBtn.textContent = legAuto ? 'Parar' : 'Correr solo'
+  legBtn.addEventListener('click', () => { legAuto = !legAuto; legBtn.textContent = legAuto ? 'Parar' : 'Correr solo' })
+  phIn.addEventListener('input', () => { legAuto = false; legBtn.textContent = 'Correr solo'; legPhase = (+phIn.value) * Math.PI / 180; drawLegs() })
+  const drawLegs = () => {
+    const { ctx, w, h } = G
+    ctx.clearRect(0, 0, w, h)
+    const gy = h - 22
+    ground(G, gy)
+    const swing = Math.sin(legPhase) * 0.75
+    const liftF = Math.max(0, Math.cos(legPhase)) * 1.35
+    const liftB = Math.max(0, -Math.cos(legPhase)) * 1.35
+    const hipX = w / 2, hipY = gy - 92 - Math.abs(Math.sin(legPhase)) * 6
+    // cuerpo
+    ctx.fillStyle = '#5a2226'
+    ctx.beginPath(); ctx.ellipse(hipX, hipY - 34, 22, 40, 0.15, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = col('--glow'); ctx.beginPath(); ctx.arc(hipX + 8, hipY - 82, 15, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(hipX + 14, hipY - 84, 2.5, 0, Math.PI * 2); ctx.fill()
+    const leg = (thigh, knee, color, label) => {
+      const T = 46, S2 = 44
+      const kx = hipX + Math.sin(thigh) * T, ky = hipY + Math.cos(thigh) * T
+      const sa = thigh - knee
+      const ax = kx + Math.sin(sa) * S2, ay = ky + Math.cos(sa) * S2
+      ctx.strokeStyle = color; ctx.lineCap = 'round'; ctx.lineWidth = 10
+      ctx.beginPath(); ctx.moveTo(hipX, hipY); ctx.lineTo(kx, ky); ctx.lineTo(ax, ay); ctx.stroke()
+      ctx.lineWidth = 9; ctx.strokeStyle = '#0b0909'
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + Math.cos(sa) * 14, ay - Math.sin(sa) * 14); ctx.stroke()
+      ctx.fillStyle = col('--accent'); ctx.beginPath(); ctx.arc(kx, ky, 3.5, 0, Math.PI * 2); ctx.fill()
+      ctx.fillStyle = col('--muted'); ctx.font = '11px ' + col('--font-mono'); ctx.fillText(label, kx + 10, ky)
+    }
+    leg(-swing, liftB, '#3a3032', 'trasera')
+    leg(swing, liftF, '#8a7d76', 'delantera')
+    ctx.fillStyle = col('--accent'); ctx.beginPath(); ctx.arc(hipX, hipY, 4, 0, Math.PI * 2); ctx.fill()
+    const deg = Math.round(((legPhase * 180 / Math.PI) % 360 + 360) % 360)
+    phOut.textContent = deg + '°'
+    if (legAuto) phIn.value = deg
+  }
+  drawLegs()
+
+  // ---------- Bucle común de las demos ----------
+  let last = 0
+  const frame = (now) => {
+    const dt = Math.min((now - (last || now)) / 1000, 1 / 30); last = now
+    if (visible.has('loop') && loopRunning) {
+      loopAcc += dt
+      const interval = 1 / (+fpsIn.value)
+      if (loopAcc >= interval) { loopX += loopAcc * 0.35; loopAcc = 0; loopFrames++; drawLoop() }
+    }
+    if (visible.has('jump') && jActive) { for (let i = 0; i < 4; i++) stepJump(dt / 4); drawJump() }
+    if (visible.has('spring') && (!reduce || springBurst > 0)) {
+      if (!reduce) { sflip += dt; if (sflip > 1.8) { sflip = 0; starget = starget > 0.5 ? 0.2 : 0.8 } }
+      springBurst = Math.max(0, springBurst - dt)
+      for (let i = 0; i < 4; i++) stepSpring(dt / 4)
+      drawSpring()
+    }
+    if (visible.has('leg') && legAuto) { legPhase += dt * 7; drawLegs() }
+    requestAnimationFrame(frame)
+  }
+  requestAnimationFrame(frame)
+})()
+</script>

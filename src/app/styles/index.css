@@ -1,0 +1,103 @@
+@import 'tailwindcss';
+
+/* Paleta "02 / Ceniza y Burdeos" — ver docs/tokens.css */
+@theme {
+  --color-ash-950: #0a0a0a;
+  --color-ash-800: #33312f;
+  --color-ash-500: #726e68;
+  --color-ash-300: #b7b4ae;
+  --color-bone-100: #f1e9dd;
+  --color-wine-900: #371e1e;
+  --color-wine-500: #8e2a2e;
+  --color-glow: #f3e6d3;
+
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-body: 'EB Garamond', ui-serif, Georgia, serif;
+
+  --tracking-caps: 0.22em;
+
+  --animate-twinkle: twinkle 3.6s ease-in-out infinite;
+  --animate-eq: eq 0.9s ease-in-out infinite alternate;
+  --animate-reveal: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.85);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes eq {
+    from {
+      transform: scaleY(0.3);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ash-950 font-body text-ash-300 antialiased;
+    min-height: 100dvh;
+    /* Retícula muy tenue */
+    background-image:
+      linear-gradient(to right, rgb(241 233 221 / 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(241 233 221 / 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  ::selection {
+    @apply bg-wine-500 text-bone-100;
+  }
+
+  :focus-visible {
+    @apply outline outline-1 outline-offset-4 outline-bone-100;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility tracking-caps {
+  letter-spacing: var(--tracking-caps);
+}
+
+/* Elemento revelado al hacer scroll (ver useReveal) */
+@utility reveal-init {
+  opacity: 0;
+  transform: translateY(16px);
+}
