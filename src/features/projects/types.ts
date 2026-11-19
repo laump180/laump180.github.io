@@ -15,7 +15,7 @@ export interface ProjectLogoCover {
   alt: string
 }
 
-export type ProjectCover = ProjectImage | ProjectLogoCover
+export type ProjectCover = (ProjectImage & { fit?: 'contain' }) | ProjectLogoCover
 
 export interface ProjectContribution {
   title: string

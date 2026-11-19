@@ -36,7 +36,10 @@ export function ProjectCover({ cover, className, lazy = false }: ProjectCoverPro
       width={756}
       height={400}
       loading={lazy ? 'lazy' : undefined}
-      className={cn('object-cover', className)}
+      className={cn(
+        cover.fit === 'contain' ? 'bg-ash-950 object-contain' : 'object-cover',
+        className,
+      )}
     />
   )
 }

@@ -1,3 +1,7 @@
+import chaosCover from '@/shared/assets/images/projects/chaos-office-cover.jpg'
+import chaosHud from '@/shared/assets/images/projects/chaos-office-hud.png'
+import chaosKeypad from '@/shared/assets/images/projects/chaos-office-keypad.png'
+import chaosMenu from '@/shared/assets/images/projects/chaos-office-menu.png'
 import echoesGameplay from '@/shared/assets/images/projects/echoes-gameplay.webp'
 import echoesMenu from '@/shared/assets/images/projects/echoes-menu.webp'
 import kidsRoom from '@/shared/assets/images/projects/unity-essentials-kids-room.webp'
@@ -6,6 +10,32 @@ import bedroom from '@/shared/assets/images/projects/unity-essentials-bedroom.we
 import type { Project } from '../types'
 
 export const PROJECTS: readonly Project[] = [
+  {
+    slug: 'chaos-in-the-office',
+    title: 'Chaos in the Office',
+    tags: ['Unity', 'C#', 'UI Toolkit', 'Música y SFX'],
+    badges: ['Game Jam · 48 h', 'Dos mundos', 'WebGL'],
+    description:
+      'Un juego de suspenso en primera persona. Un ascensor te lleva a una versión alterada de la oficina, donde debes resolver acertijos y escapar de una araña que te persigue.',
+    contribution: {
+      title: 'Mi aporte · Interfaz, música y efectos de sonido',
+      body: 'Diseñé e implementé la interfaz con UI Toolkit, incluidos el menú principal con estética de carpeta de archivo, los menús de pausa y opciones y las pantallas de victoria y derrota. Integré la música y los efectos de sonido de los menús, el ascensor, los acertijos y la persecución.',
+    },
+    image: {
+      src: chaosCover,
+      alt: 'Portada de Chaos in the Office con la oficina normal y su versión caótica separadas por una grieta luminosa.',
+      fit: 'contain',
+    },
+    gallery: [
+      { src: chaosMenu, alt: 'Menú principal con pestañas y una carpeta de archivo.' },
+      { src: chaosKeypad, alt: 'Panel de acceso con teclado para introducir un código.' },
+      {
+        src: chaosHud,
+        alt: 'Interfaz del acertijo con el objetivo y el contador de huevos devueltos al nido.',
+      },
+    ],
+    links: [{ label: 'Jugar en itch.io', href: 'https://lausmp.itch.io/chao-in-the-office' }],
+  },
   {
     slug: 'echoes',
     title: 'Echoes',

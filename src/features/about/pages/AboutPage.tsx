@@ -1,5 +1,5 @@
 import { Download, MapPin } from 'lucide-react'
-import hoodedHero from '@/shared/assets/sprites/hooded-hero.webp'
+import hoodedTraveler from '@/shared/assets/sprites/hooded-traveler-crystal.png'
 import { usePageTitle } from '@/shared/hooks/usePageTitle'
 import { CV_FILENAME, CV_URL } from '@/shared/layout'
 import { Button, Container, FramedPanel, Reveal, SectionTitle, SparkleField } from '@/shared/ui'
@@ -54,9 +54,11 @@ export function AboutPage() {
             <FramedPanel className="mx-auto max-w-[340px]">
               <div className="grid place-items-center bg-[radial-gradient(circle_at_50%_60%,rgb(142_42_46/0.18),transparent_65%)] px-8 py-10">
                 <img
-                  src={hoodedHero}
-                  alt="Ilustración de una pequeña figura con capucha burdeos que alza la mano hacia un cristal."
-                  className="max-h-72 w-auto"
+                  src={hoodedTraveler}
+                  alt="Viajera con capa burdeos y un cristal flotando sobre su mano."
+                  width={1254}
+                  height={1254}
+                  className="h-auto w-full"
                 />
               </div>
             </FramedPanel>
